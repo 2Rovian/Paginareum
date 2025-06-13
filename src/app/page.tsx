@@ -1,103 +1,62 @@
-import Image from "next/image";
+import Link from 'next/link';
+import NavbarComp from "./components/Navbar";
+import { GiLaurels } from "react-icons/gi";
+import { GiScrollQuill } from "react-icons/gi";
+import { GiGreekTemple } from "react-icons/gi";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <>
+      <NavbarComp />
+      <div className="max-w-5xl lg:px-0 mx-auto px-4">
+        <main className="bg-[#f6f1e7] mt-6 flex flex-col items-center justify-center text-center p-4">
+          <h1 className="text-4xl font-serif text-[#1a1a1a] mb-4">Bem-vindo ao <span className="text-[#b03a2e]">Paginare</span></h1>
+          <p className="text-[#6b705c] max-w-lg mb-6">
+            Organize seus livros e leia do seu jeito. O Paginare oferece uma biblioteca pessoal com ajuste de fonte, modo escuro e recursos que tornam sua leitura mais acessível.
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          </p>
+          <div className="flex gap-4">
+            <button className="bg-[#b03a2e] text-[#f6f1e7] hover:text-[#e6c46c] px-4 py-2 rounded-lg cursor-pointer transition-hover">
+              Adicionar Livro
+            </button>
+            <Link href={'/bibliotheca'} className='rounded-lg'>
+              <button className="border border-[#6b705c] hover:border-[#b03a2e] text-[#6b705c] px-4 py-2 rounded-lg hover:text-[#b03a2e]  cursor-pointer transition-hover">
+                Ver Bibliotheca
+              </button>
+            </Link>
+          </div>
+        </main>
+
+        <section className="my-6 w-full mx-auto">
+          <h2 className="text-3xl font-serif text-[#1a1a1a] mb-4 text-center">Por que Paginare?</h2>
+          <ul className="grid grid-cols-1 md:grid-cols-3 gap-4 text-[#1a1a1a]">
+            <li className="px-3 py-4 md:py-5 flex flex-col justify-center border border-[#b03a2e] rounded-lg  text-center">
+              <GiLaurels className="mx-auto text-6xl mb-2 text-[#e6c46c]"/>
+              <span className="font-bold mb-1 text-lg text-[#b03a2e]">Organização</span>
+              <p className="text-sm text-[#6b705c]">Grupos, subgrupos e livros no lugar certo.</p>
+            </li>
+            <li className="px-3 py-4 md:py-5 flex flex-col justify-center border border-[#b03a2e] rounded-lg  text-center">
+              <GiScrollQuill className="mx-auto text-6xl mb-2 text-[#e6c46c]"/>
+              <span className="font-bold mb-1 text-lg text-[#b03a2e]">Acessibilidade</span>
+              <p className="text-sm text-[#6b705c]">Ajuste de fonte, modo escuro e leitura adaptada.</p>
+            </li>
+            <li className="px-3 py-4 md:py-5 flex flex-col justify-center border border-[#b03a2e] rounded-lg  text-center">
+              <GiGreekTemple className="mx-auto text-6xl mb-2 text-[#e6c46c]"/>
+              <span className="font-bold mb-1 text-lg text-[#b03a2e]">Mobilidade</span>
+              <p className="text-sm text-[#6b705c]">Leia onde quiser, quando quiser.</p>
+            </li>
+          </ul>
+        </section>
+      </div>
+
+    </>
   );
 }
+
+// Mistura o clássico com o moderno, remetendo ao saber antigo, mas com usabilidade atual.
+// Cores sugeridas:
+// Bege claro (#f6f1e7) — cor de papiro.
+// Vermelho Pompeia (#b03a2e) — símbolo de elegância e poder.
+// Dourado queimado (#c79c60) — detalhes de destaque.
+// Cinza-escuro ou preto fosco (#1a1a1a) — para contraste e leitura.
+// Verde oliva ou louro (#6b705c) — toques vegetais, lembrando coroas romanas.
