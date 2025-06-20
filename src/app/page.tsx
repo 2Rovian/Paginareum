@@ -9,7 +9,7 @@ export default function Home() {
     <>
       <NavbarComp />
       <div className="max-w-5xl lg:px-0 mx-auto px-4">
-        <main className="bg-[#f6f1e7] mt-6 flex flex-col items-center justify-center text-center p-4">
+        <main className="bg-[#f6f1e7] mt-10 flex flex-col items-center justify-center text-center px-4 pb-4">
           <h1 className="text-4xl font-serif text-[#1a1a1a] mb-4">Bem-vindo ao <span className="text-[#b03a2e]">Paginare</span></h1>
           <p className="text-[#6b705c] max-w-lg mb-6">
             Organize seus livros e leia do seu jeito. O Paginare oferece uma biblioteca pessoal com ajuste de fonte, modo escuro e recursos que tornam sua leitura mais acessível.

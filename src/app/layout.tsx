@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
 import "./globals.css";
+import { Toaster } from 'react-hot-toast'
 
 const latoFont = Lato({
-    subsets: ['latin'],
-    weight: '400'
+  subsets: ['latin'],
+  weight: '400'
 })
 
 export const metadata: Metadata = {
@@ -23,6 +24,12 @@ export default function RootLayout({
         className={`antialiased ${latoFont.className}`}
       >
         {children}
+        <Toaster
+          position="bottom-right"
+          
+        />
+
+
       </body>
     </html>
   );
