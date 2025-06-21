@@ -8,7 +8,6 @@ export default function AdicionarLivros({ onAdd }: { onAdd?: () => void }) {
   const [filePath, setFilePath] = useState("");
   const [loading, setLoading] = useState(false);
   const [numPag, setNumPag] = useState("");
-  // const [categoria, setCategoria] = useState("");
   const [imgURL, setImgURL] = useState("");
 
   const handleAdicionar = () => {
@@ -25,23 +24,18 @@ export default function AdicionarLivros({ onAdd }: { onAdd?: () => void }) {
         title: title.trim(),
         imgURL: imgURL.trim(),
         pages: numPag.trim(),
-        // category: categoria.trim(),
         filePath: filePath.trim(),
       };
 
-      // Leia do localStorage primeiro
       const livrosSalvos = localStorage.getItem("paginareLivros");
       const livros = livrosSalvos ? JSON.parse(livrosSalvos) : [];
-
       const novosLivros = [...livros, novoLivro];
       localStorage.setItem("paginareLivros", JSON.stringify(novosLivros));
 
       toast.success("Livro adicionado!");
 
-      // Limpa os campos
       setTitle("");
       setNumPag("");
-      // setCategoria("");
       setFilePath("");
       setImgURL("");
 
@@ -55,50 +49,52 @@ export default function AdicionarLivros({ onAdd }: { onAdd?: () => void }) {
   };
 
   return (
-    <div className="flex flex-col gap-y-2 mx-auto text-[#1a1a1a]">
+    <div className="flex flex-col gap-y-2 mx-auto text-[#1a1a1a] bg-[#f6f1e7] p-0 rounded-xl">
       <input
         type="text"
         placeholder="Título do livro"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        className="outline focus:outline-2 px-3 py-2 rounded transition-all duration-150"
+        className="bg-white px-3 py-2 rounded shadow transition-all duration-150 focus:outline-1 focus:outline-[#b03a2e]"
       />
       <input
         type="text"
         placeholder="URL da imagem"
         value={imgURL}
         onChange={(e) => setImgURL(e.target.value)}
-        className="outline focus:outline-2 px-3 py-2 rounded transition-all duration-150"
+        className="bg-white px-3 py-2 rounded shadow transition-all duration-150 focus:outline-1 focus:outline-[#b03a2e]"
       />
       <input
         type="text"
         placeholder="Número de páginas"
         value={numPag}
         onChange={(e) => setNumPag(e.target.value)}
-        className="outline focus:outline-2 px-3 py-2 rounded transition-all duration-150"
+        className="bg-white px-3 py-2 rounded shadow transition-all duration-150 focus:outline-1 focus:outline-[#b03a2e]"
       />
-      {/* <input
-        type="text"
-        placeholder="Categoria"
-        value={categoria}
-        onChange={(e) => setCategoria(e.target.value)}
-        className="outline focus:outline-2 px-3 py-2 rounded transition-all duration-150"
-      /> */}
       <input
         type="text"
         placeholder="Caminho completo (ex: file:///C:/Users/.../arquivo.pdf)"
         value={filePath}
         onChange={(e) => setFilePath(e.target.value)}
-        className="outline focus:outline-2 px-3 py-2 rounded transition-all duration-150"
+        className="bg-white px-3 py-2 rounded shadow transition-all duration-150 focus:outline-1 focus:outline-[#b03a2e]"
       />
-      <div className="flex items-center gap-x-2 justify-end mt-1">
-        <button className='border-2 border-[#6b705c] text-[#6b705c] px-4 py-2 rounded-lg hover:text-[#b03a2e] hover:border-[#b03a2e] cursor-pointer transition hover'>
+
+      <div className="flex items-center gap-x-3 justify-end mt-3">
+        <button
+          className="border-2 border-[#6b705c] text-[#6b705c] px-4 py-2 rounded-lg hover:text-[#b03a2e] hover:border-[#b03a2e] cursor-pointer transition duration-200"
+          onClick={() => {
+            setTitle("");
+            setNumPag("");
+            setFilePath("");
+            setImgURL("");
+          }}
+        >
           Descartar
         </button>
         <button
           onClick={handleAdicionar}
           disabled={loading}
-          className="border-2 border-[#b03a2e] bg-[#b03a2e] text-[#f6f1e7] px-4 py-2 rounded-lg hover:text-[#e6c46c] cursor-pointer transition hover "
+          className="border-2 border-[#b03a2e] bg-[#b03a2e] text-[#f6f1e7] px-4 py-2 rounded-lg cursor-pointer hover:bg-[#a93226] transition duration-200"
         >
           {loading ? "Adicionando..." : "Adicionar Livro"}
         </button>

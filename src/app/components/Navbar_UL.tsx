@@ -8,7 +8,8 @@ export default function Navbar_UL() {
     const links = [
         { label: "Home", href: "/" },
         { label: "Livros", href: "/bibliotheca" },
-        { label: "Sobre", href: "/sobre" }
+        { label: "Login", href: "/login" },
+        // { label: "Sobre", href: "/sobre" }
     ]
 
     return (
