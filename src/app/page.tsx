@@ -10,9 +10,9 @@ export default function Home() {
       <NavbarComp />
       <div className="max-w-5xl lg:px-0 mx-auto px-4">
         <main className="bg-[#f6f1e7] mt-10 flex flex-col items-center justify-center text-center px-4 pb-4">
-          <h1 className="text-4xl font-serif text-[#1a1a1a] mb-4">Bem-vindo ao <span className="text-[#b03a2e]">Paginare</span></h1>
+          <h1 className="text-4xl font-serif text-[#1a1a1a] mb-4">Bem-vindo ao <span className="text-[#b03a2e]">Paginareum</span></h1>
           <p className="text-[#6b705c] max-w-lg mb-6">
-            Organize seus livros e leia do seu jeito. O Paginare oferece uma biblioteca pessoal com ajuste de fonte, modo escuro e recursos que tornam sua leitura mais acessível.
+            Organize seus livros e leia do seu jeito. O Paginareum oferece uma biblioteca pessoal com ajuste de fonte, modo escuro e recursos que tornam sua leitura mais acessível.
 
           </p>
           <div className="flex gap-4">
@@ -28,7 +28,7 @@ export default function Home() {
         </main>
 
         <section className="my-6 w-full mx-auto">
-          <h2 className="text-3xl font-serif text-[#1a1a1a] mb-4 text-center">Por que Paginare?</h2>
+          <h2 className="text-3xl font-serif text-[#1a1a1a] mb-4 text-center">Por que Paginareum?</h2>
           <ul className="grid grid-cols-1 md:grid-cols-3 gap-4 text-[#1a1a1a]">
             <li className="px-3 py-4 md:py-5 flex flex-col justify-center border border-[#b03a2e] rounded-lg  text-center">
               <GiLaurels className="mx-auto text-6xl mb-2 text-[#e6c46c]"/>

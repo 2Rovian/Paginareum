@@ -27,10 +27,10 @@ export default function AdicionarLivros({ onAdd }: { onAdd?: () => void }) {
         filePath: filePath.trim(),
       };
 
-      const livrosSalvos = localStorage.getItem("paginareLivros");
+      const livrosSalvos = localStorage.getItem("PaginareumLivros");
       const livros = livrosSalvos ? JSON.parse(livrosSalvos) : [];
       const novosLivros = [...livros, novoLivro];
-      localStorage.setItem("paginareLivros", JSON.stringify(novosLivros));
+      localStorage.setItem("PaginareumLivros", JSON.stringify(novosLivros));
 
       toast.success("Livro adicionado!");
 

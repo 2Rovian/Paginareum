@@ -7,7 +7,7 @@ export default function SobrePage() {
             <div className="max-w-5xl mx-auto lg:px-0 px-4">
                 <main className="bg-[#f6f1e7] mt-10 pb-4 flex flex-col justify-center text-center">
                     <h1 className="text-4xl font-serif text-[#1a1a1a] text-center mb-6 ">
-                        <span className="text-[#b03a2e]">Paginare</span> é:
+                        <span className="text-[#b03a2e]">Paginareum</span> é:
                     </h1>
 
                     <p className='text-[#6b705c] max-w-lg mx-auto'>Um projeto pessoal sem fins lucrativos que resolve uma demanda de organização e melhor leitura de PDFs com base em um leitor novo :)</p>

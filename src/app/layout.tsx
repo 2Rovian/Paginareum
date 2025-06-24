@@ -9,8 +9,8 @@ const latoFont = Lato({
 })
 
 export const metadata: Metadata = {
-  title: "Paginare",
-  description: "Paginare, your place to read only the very best",
+  title: "Paginareum",
+  description: "Paginareum, your place to read only the very best",
 };
 
 export default function RootLayout({

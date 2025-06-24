@@ -16,7 +16,7 @@ export default function Biblioteca() {
   const [mostrarAddLivro, setMostrarAddLivro] = useState<boolean>(false);
 
   useEffect(() => {
-    const livrosSalvos = localStorage.getItem("paginareLivros");
+    const livrosSalvos = localStorage.getItem("PaginareumLivros");
     if (livrosSalvos) {
       setLivros(JSON.parse(livrosSalvos));
     }
