@@ -1,13 +1,115 @@
 'use client'
-import { useState } from "react"
+import { FormEvent, useState } from "react"
 import ProvidersComp from "./ProvidersComp";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
 
+import { supabase } from "@/app/utils/supabase/client";
+import toast from "react-hot-toast";
+
 export default function LoginComp() {
     const [isLogin, setIsLogin] = useState<boolean>(false);
+    const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
+
+    // form inputs
+    const [email, setEmail] = useState<string>('');
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [confirmPassword, setConfirmPassword] = useState<string>('');
+    // -----------
+
     const [ShowConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
     const [ShowPassword, setShowPassword] = useState<boolean>(false);
+
+    function handleChange() {
+        setIsLogin(!isLogin);
+        setUsername(''); setPassword(''); setConfirmPassword('');
+        setEmail('')
+    }
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+
+        const cleanEmail = email.trim();
+        const cleanUsername = username.trim();
+
+        if (!isLogin) {
+            if (password !== confirmPassword) {
+                toast.error("As senhas não coincidem")
+                setLoadingSubmit(false)
+                return
+            }
+            if (cleanUsername.length < 6) {
+                toast.error("O nome de usuário deve ter pelo menos 6 caracteres")
+                return
+            }
+            if (!email.includes("@") || !email.includes(".")) {
+                toast.error("Email inválido")
+                setLoadingSubmit(false)
+                return
+            }
+            if (password.length < 8) {
+                toast.error("A senha deve ter pelo menos 8 caracteres")
+                setLoadingSubmit(false)
+                return
+            }
+        }
+
+        setLoadingSubmit(true)
+        try {
+            if (isLogin) {
+                const { error: signInError } = await supabase.auth.signInWithPassword({
+                    email: cleanEmail,
+                    password
+                });
+                if (signInError) {
+                    console.error("Error ao logar: ", signInError.message);
+                    toast.error("Erro ao fazer login :(");
+                } else {
+                    toast.success("Login feito com sucesso :)");
+                }
+
+            } else {
+                const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+                    email: cleanEmail,
+                    password
+                });
+
+                if (signUpError) {
+                    console.error("Erro ao criar conta: ", signUpError.message);
+                    toast.error("Erro ao cadastrar :(");
+                    return;
+                }
+
+                // registo do usuário na tabela 'profiles'
+                const { error: profileError } = await supabase.from("profiles")
+                    .insert({
+                        profile_id: signUpData.user?.id,
+                        username: cleanUsername,
+                    });
+
+                if (profileError) {
+                    console.error("Erro ao criar perfil: ", profileError.message);
+                    toast.error("Erro ao criar perfil");
+                    return;
+                }
+                await handleLogin(cleanEmail, password);
+            }
+        } finally {
+            setLoadingSubmit(false); 
+        }
+
+    }
+
+    async function handleLogin(email: string, password: string) {
+        const { error: signInError } = await supabase.auth.signInWithPassword({ email, password })
+        if (signInError) {
+            console.error("Error ao logar: ", signInError?.message)
+            toast.error("Erro ao fazer login :(")
+            return
+        }
+        toast.success("Login feito com sucesso :)")
+    }
 
     return (
         <>
@@ -21,18 +123,32 @@ export default function LoginComp() {
                     </p>
                 </div>
 
-                <form className="flex flex-col gap-y-2">
+                <form className="flex flex-col gap-y-2"
+                    onSubmit={handleSubmit}
+                >
                     <input
                         type="text"
-                        placeholder="Nome de usuário"
-                        className="focus:outline-1 focus:outline-[#b03a2e] px-3 py-2 rounded bg-white transition-all duration-150 shadow"
+                        value={email}
+                        onChange={(e => setEmail(e.target.value))}
+                        placeholder="Email"
+                        className="focus:outline-2 outline-[#b03a2e] px-3 py-2 rounded bg-white ease-in-out duration-100 shadow"
                     />
 
-                    <div className="flex bg-white shadow items-center rounded transition-all duration-150 focus-within:outline focus-within:outline-[#b03a2e]">
+                    {!isLogin && <input
+                        type="text"
+                        value={username}
+                        onChange={(e => setUsername(e.target.value))}
+                        placeholder={"Nome de usuário"}
+                        className="focus:outline-2 outline-[#b03a2e] px-3 py-2 rounded bg-white ease-in-out duration-100 shadow"
+                    />}
+
+                    <div className="flex bg-white shadow items-center rounded ease-in-out duration-100 focus-within:outline-2 focus-within:outline-[#b03a2e]">
                         <input
                             type={ShowPassword ? "text" : "password"}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             placeholder="Senha"
-                            className="px-3 py-2 rounded bg-white transition-all duration-150 grow focus:outline-none"
+                            className="px-3 py-2 rounded bg-white  grow focus:outline-none"
                         />
                         <span
                             className="p-2 text-[#1a1a1a] cursor-pointer"
@@ -43,11 +159,13 @@ export default function LoginComp() {
                     </div>
 
                     {!isLogin &&
-                        <div className="flex bg-white shadow items-center rounded transition-all duration-150 focus-within:outline focus-within:outline-[#b03a2e]">
+                        <div className="flex bg-white shadow items-center rounded ease-in-out duration-100 focus-within:outline-2 focus-within:outline-[#b03a2e]">
                             <input
                                 type={ShowConfirmPassword ? "text" : "password"}
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
                                 placeholder="Confirme a senha"
-                                className="px-3 py-2 rounded bg-white transition-all duration-150 grow focus:outline-none"
+                                className="px-3 py-2 rounded bg-white grow focus:outline-none"
                             />
                             <span
                                 className="p-2 text-[#1a1a1a] cursor-pointer"
@@ -59,12 +177,20 @@ export default function LoginComp() {
 
                     }
 
-                    <button
-                        type='submit'
-                        className="duration-300 ease-in-out text-white py-3 rounded-md font-bold bg-[#b03a2e] hover:bg-[#a93226] mt-4 cursor-pointer"
-                    >
-                        {isLogin ? 'Entrar' : 'Cadastrar'}
-                    </button>
+                    {loadingSubmit ?
+                        <div className="flex justify-center 
+                    duration-300 ease-in-out text-white py-3 rounded-md font-bold bg-[#b03a2e] mt-4 cursor-pointer
+                    ">
+                            <div className="animate-spin rounded-full size-6 border-t-2 border-b-2 border-white"></div>
+                        </div>
+                        :
+                        <button
+                            type='submit'
+                            className="duration-300 ease-in-out text-white py-3 rounded-md font-bold bg-[#b03a2e] hover:bg-[#a93226] mt-4 cursor-pointer"
+                        >
+                            {isLogin ? 'Entrar' : 'Cadastrar'}
+                        </button>}
+
                 </form>
 
                 {isLogin && <div className="mt-5"><ProvidersComp /></div>}
@@ -80,7 +206,7 @@ export default function LoginComp() {
                 {isLogin ? "Não tem uma conta?" : "Já tem uma conta?"}
                 <span
                     className="font-semibold text-[#b03a2e] hover:underline cursor-pointer ml-1"
-                    onClick={() => { setIsLogin(!isLogin) }}
+                    onClick={handleChange}
                 >
                     {isLogin ? 'Cadastre-se' : 'Entre'}
                 </span>.

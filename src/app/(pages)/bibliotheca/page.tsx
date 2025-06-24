@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from "react";
-import AdicionarLivros from "@/app/components/AdicionarLivro";
+// import AdicionarLivros from "@/app/components/AdicionarLivro";
 import NavbarComp from "../../components/Navbar";
 import { GiScrollUnfurled, GiOpenBook } from "react-icons/gi";
 import LoadingComp from "@/app/components/LoadingComp";
@@ -8,6 +8,7 @@ import { IoCloseCircleOutline } from "react-icons/io5";
 
 import { Livro } from "../../types/livro";
 import toast from "react-hot-toast";
+import AdicionarLivroGuest from "@/app/components/(guest)/AdicionarLivroGuest";
 
 export default function Biblioteca() {
   const [livros, setLivros] = useState<Livro[]>([]);
@@ -77,7 +78,7 @@ export default function Biblioteca() {
                   </button>
                 </div>
 
-                <AdicionarLivros
+                <AdicionarLivroGuest
 
                 />
 

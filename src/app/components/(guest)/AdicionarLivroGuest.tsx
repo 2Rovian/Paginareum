@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react";
-import { Livro } from "../types/livro";
+import { Livro } from "../../types/livro";
 import toast from "react-hot-toast";
 
 export default function AdicionarLivros({ onAdd }: { onAdd?: () => void }) {
