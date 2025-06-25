@@ -3,13 +3,21 @@ import { FormEvent, useState } from "react"
 import ProvidersComp from "./ProvidersComp";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
+import { MdAccountBox } from "react-icons/md";
 
 import { supabase } from "@/app/utils/supabase/client";
 import toast from "react-hot-toast";
 
+import { useAuthStore } from "@/app/stores/session-store";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 export default function LoginComp() {
     const [isLogin, setIsLogin] = useState<boolean>(false);
     const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
+
+    const { isAuthenticated } = useAuthStore();
+    const setAuthenticated = useAuthStore((state) => state.setAuthenticated);
 
     // form inputs
     const [email, setEmail] = useState<string>('');
@@ -20,6 +28,8 @@ export default function LoginComp() {
 
     const [ShowConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
     const [ShowPassword, setShowPassword] = useState<boolean>(false);
+
+    const router = useRouter();
 
     function handleChange() {
         setIsLogin(!isLogin);
@@ -64,9 +74,12 @@ export default function LoginComp() {
                 });
                 if (signInError) {
                     console.error("Error ao logar: ", signInError.message);
-                    toast.error("Erro ao fazer login :(");
+                    toast.error("Erro ao fazer login");
                 } else {
-                    toast.success("Login feito com sucesso :)");
+                    toast.success("Login feito com sucesso");
+                    setAuthenticated(true);
+                    router.push('/')
+                    
                 }
 
             } else {
@@ -77,7 +90,7 @@ export default function LoginComp() {
 
                 if (signUpError) {
                     console.error("Erro ao criar conta: ", signUpError.message);
-                    toast.error("Erro ao cadastrar :(");
+                    toast.error("Erro ao cadastrar");
                     return;
                 }
 
@@ -96,7 +109,7 @@ export default function LoginComp() {
                 await handleLogin(cleanEmail, password);
             }
         } finally {
-            setLoadingSubmit(false); 
+            setLoadingSubmit(false);
         }
 
     }
@@ -109,10 +122,37 @@ export default function LoginComp() {
             return
         }
         toast.success("Login feito com sucesso :)")
+        setAuthenticated(true); // att globalState
+        router.push('/')
     }
+
+    if (isAuthenticated) return (
+        <div className="max-w-md mx-auto mt-12 p-6 bg-[#f6f1e7] border flex flex-col justify-center border-[#6b705c] rounded-xl shadow-md text-center">
+            <MdAccountBox className="text-7xl mb-2 mx-auto text-[#b03a2e]" />
+            <h2 className="text-2xl font-semibold text-[#1a1a1a] mb-3">
+                Você já está conectado
+            </h2>
+            <p className="text-[#6b705c] mb-6">
+                Acesse a página inicial para explorar os conteúdos disponíveis.
+            </p>
+            <Link
+                href="/"
+                className="inline-block bg-[#b03a2e] hover:bg-[#a93226] text-white px-6 py-2 rounded-lg font-semibold transition-colors duration-200"
+            >
+                Retornar à Home
+            </Link>
+        </div>
+
+    )
 
     return (
         <>
+            <h1 className="text-4xl mb-4 font-serif text-[#1a1a1a]">
+                Conecte-se ao <span className="text-[#b03a2e]">Paginareum</span>
+
+
+            </h1>
+
             <div className="mt-0 border border-[#6b705c] bg-[#f6f1e7] text-[#1a1a1a] flex flex-col p-6 w-full max-w-[500px] rounded-xl mx-auto">
                 <div className="mb-6">
                     <h2 className="text-2xl text-[#b03a2e] font-bold">
