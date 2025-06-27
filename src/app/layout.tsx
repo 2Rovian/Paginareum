@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`antialiased ${latoFont.className}`}
+        className={`antialiased ${latoFont.className} selection:bg-[#b03a2e] selection:text-[#f6f1e7]`}
       >
         {children}
         <Toaster

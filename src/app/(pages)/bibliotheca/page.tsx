@@ -10,10 +10,15 @@ import { Livro } from "../../types/livro";
 import toast from "react-hot-toast";
 import AdicionarLivroGuest from "@/app/components/(guest)/AdicionarLivroGuest";
 
+import { useAuthStore } from "@/app/stores/session-store";
+import AdicionarLivroAuth from "@/app/components/(logged)/AdicionarLivroAuth";
+
 export default function Biblioteca() {
   const [livros, setLivros] = useState<Livro[]>([]);
   const [loading, setLoading] = useState(true);
   const [mostrarAddLivro, setMostrarAddLivro] = useState<boolean>(false);
+
+  const { isAuthenticated } = useAuthStore();
 
   useEffect(() => {
     const livrosSalvos = localStorage.getItem("PaginareumLivros");
@@ -78,9 +83,8 @@ export default function Biblioteca() {
                   </button>
                 </div>
 
-                <AdicionarLivroGuest
-
-                />
+                {isAuthenticated ? <AdicionarLivroAuth /> : <AdicionarLivroGuest />}
+                {/* <AdicionarLivroGuest /> */}
 
               </div>
             </div>
