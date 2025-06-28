@@ -1,6 +1,6 @@
 'use client'
 import { ChangeEvent, FormEvent, useState } from "react";
-import { Livro } from "../../types/livro";
+import { Livro } from "../../types/types";
 import toast from "react-hot-toast";
 import { FiImage, FiFileText } from "react-icons/fi";
 

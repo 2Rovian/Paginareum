@@ -12,17 +12,7 @@ import { GiExpand } from "react-icons/gi";
 import { IoCloseCircleOutline } from "react-icons/io5";
 // -----
 
-interface Book {
-    book_id: number;
-    created_at: string;
-    author: string;
-    title: string;
-    pages: number;
-    urlPath: string;
-    cover_img: string;
-    category: string;
-    profile_id: string;
-}
+import { Book } from "@/app/types/types";
 
 export default function BibliotecaAuthComp() {
     const [books, setBooks] = useState<Book[]>([]);
@@ -270,8 +260,6 @@ export default function BibliotecaAuthComp() {
                     </article>
                 ))}
             </section>
-
-
 
         </>
     )
