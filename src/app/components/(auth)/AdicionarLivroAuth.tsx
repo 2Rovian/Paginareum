@@ -8,10 +8,11 @@ import { supabase } from "@/app/utils/supabase/client";
 
 export default function AdicionarLivroAuth() {
   const [title, setTitle] = useState("");
-  const [filePath, setFilePath] = useState("");
+  // const [filePath, setFilePath] = useState("");
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(false);
   const [numPag, setNumPag] = useState("");
+  const [author_name, setAuthor_name] = useState("");
 
   const [pdf_File, setPdfFile] = useState<File | null>(null);
   const [imgURL, setImgURL] = useState<File | null>(null);
@@ -92,6 +93,7 @@ export default function AdicionarLivroAuth() {
       .from('books')
       .insert({
         title: title,
+        author: author_name,
         category: category,
         pages: numPag,
         urlPath: pdfURL,
@@ -111,7 +113,9 @@ export default function AdicionarLivroAuth() {
     setCategory("");
     setNumPag("");
     setImgURL(null);
-    setFilePath("");
+    setPdfFile(null);
+    setAuthor_name("");
+    // setFilePath("");
 
     setLoading(false)
   }
@@ -131,7 +135,7 @@ export default function AdicionarLivroAuth() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-y-2 mx-auto text-[#1a1a1a] bg-[#f6f1e7] p-0 rounded-xl">
+      className="flex flex-col gap-y-2 mx-auto text-[#1a1a1a] bg-[#f6f1e7] p-0 rounded-xl ">
 
       <input
         type="text"
@@ -140,6 +144,14 @@ export default function AdicionarLivroAuth() {
         onChange={(e) => setTitle(e.target.value)}
         className="bg-white px-3 py-2 rounded shadow transition-all duration-150 focus:outline-2 focus:outline-[#b03a2e]"
       />
+
+      <input
+          type="text"
+          placeholder="Autor"
+          value={author_name}
+          onChange={(e) => setAuthor_name(e.target.value)}
+          className="bg-white px-3 py-2 rounded shadow transition-all duration-150 focus:outline-2 focus:outline-[#b03a2e] "
+        />
 
       {/* Upload da Imagem */}
       <div className="flex flex-col gap-1">
@@ -176,36 +188,7 @@ export default function AdicionarLivroAuth() {
           <p className="text-sm text-[#6b705c] italic ml-1">Arquivo: {pdf_File.name}</p>
         )}
       </div>
-      {/* <div className="flex flex-col gap-2">
-        <label htmlFor="img-upload" className="cursor-pointer px-3 py-2 bg-white text-center rounded shadow hover:bg-gray-100 transition-all duration-150 border border-[#b03a2e] text-[#b03a2e]">
-          Selecionar Capa do Livro
-        </label>
-        <input
-          id="img-upload"
-          type="file"
-          accept="image/*"
-          onChange={handleFileImgChange}
-          className="hidden"
-        />
-        {imgURL && <p className="text-sm text-gray-600">Arquivo: {imgURL.name}</p>}
-      </div> */}
-
-      {/* <input
-        type="file"
-        accept="image/*"
-        placeholder="Capa do livro"
-        onChange={handleFileImgChange}
-        className="bg-white px-3 py-2 rounded shadow transition-all duration-150 focus:outline-2 focus:outline-[#b03a2e]"
-      /> */}
-
-      {/* <input
-        type="text"
-        placeholder="URL da imagem"
-        value={imgURL}
-        onChange={(e) => setImgURL(e.target.value)}
-        className="bg-white px-3 py-2 rounded shadow transition-all duration-150 focus:outline-2 focus:outline-[#b03a2e]"
-      /> */}
-
+  
       <div className="flex gap-x-2 items-center">
         <input
           type="text"
@@ -231,7 +214,6 @@ export default function AdicionarLivroAuth() {
           onClick={() => {
             setTitle("");
             setNumPag("");
-            setFilePath("");
             setImgURL(null);
             setPdfFile(null);
           }}

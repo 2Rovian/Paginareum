@@ -129,8 +129,7 @@ export default function Navbar_UL() {
             {showMenu && (
                 <ul
                     ref={menuRef}
-                    className="flex bg-[#b03a2e] absolute mt-3 right-0 flex-col py-0 md:hidden rounded-lg outline-2 outline-[#f6f1e7] shadow-lg 
-                    motion-opacity-in-0"
+                    className="flex bg-[#b03a2e] absolute mt-3 right-0 flex-col py-0 md:hidden rounded-lg outline-2 outline-[#f6f1e7] shadow-lg motion-opacity-in-0 z-[200]"
                 >
                     {links.map((link) => (
                         <li key={link.label} className='flex justify-start'>

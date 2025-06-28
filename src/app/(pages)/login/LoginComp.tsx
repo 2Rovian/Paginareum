@@ -130,7 +130,7 @@ export default function LoginComp() {
         <div className="max-w-md mx-auto mt-12 p-6 bg-[#f6f1e7] border flex flex-col justify-center border-[#6b705c] rounded-xl shadow-md text-center">
             <MdAccountBox className="text-7xl mb-2 mx-auto text-[#b03a2e]" />
             <h2 className="text-2xl font-semibold text-[#1a1a1a] mb-3">
-                Você já está conectado
+                Você está conectado
             </h2>
             <p className="text-[#6b705c] mb-6">
                 Acesse a página inicial para explorar os conteúdos disponíveis.
