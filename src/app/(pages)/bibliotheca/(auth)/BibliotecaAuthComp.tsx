@@ -69,8 +69,8 @@ export default function BibliotecaAuthComp() {
             .from("books")
             .delete()
             .eq("book_id", id)
-        
-        if(error){
+
+        if (error) {
             console.error("Erro ao remover livro: ", error.message)
             toast.error("Erro ao remover livro")
             return
@@ -78,6 +78,24 @@ export default function BibliotecaAuthComp() {
 
         toast.success("Livro removido");
         setShowDeleteBook(false);
+        fetchBooks();
+    }
+
+    const handleMarkAsRead = async (id: number) => {
+        const { error } = await supabase
+            .from("books")
+            .update({ read_status: "read" })
+            .eq("book_id", id)
+
+        if (error) {
+            console.error("Erro ao marcar livro como lido:", error.message);
+            toast.error("Erro ao marcar livro como lido");
+            return;
+        }
+
+        toast.success("Livro Lido!");
+        setOpenDropdownId(null);
+        
     }
 
     return (
@@ -86,7 +104,7 @@ export default function BibliotecaAuthComp() {
                 {books.map((livro) => (
                     <article
                         key={livro.book_id}
-                        className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col border border-[#e0e0e0] group "
+                        className="bg-white rounded-xl shadow overflow-hidden flex flex-col border border-[#e0e0e0] group "
                     >
 
                         <div className="relative">
@@ -97,12 +115,23 @@ export default function BibliotecaAuthComp() {
                                 loading="lazy"
                             />
 
-                            <button
-                                onClick={() => toggleDropdown(livro.book_id)}
-                                className={`absolute opacity-20 group-hover:opacity-100 ${openDropdownId ? "opacity-100" : ""} duration-300 ease-in-out top-2 right-2 p-1 text-2xl rounded-full bg-white text-[#1a1a1a] cursor-pointer  outline outline-[#797979] shadow-md hover:bg-[#fbfbfb]`}
-                            >
-                                <BsThreeDots />
-                            </button>
+                            <div className="absolute items-center flex justify-between px-2 top-2 w-full">
+
+                                {livro.read_status == "read" && <div
+                                    className={` ${openDropdownId ? "opacity-100" : ""} py-1 text-sm text-green-700 rounded-full bg-white cursor-pointer flex items-center gap-x-2 px-2 outline  shadow-md hover:bg-[#fbfbfb]`}
+                                >
+                                    <FaCheck />
+                                    <span>Lido</span>
+                                </div>}
+
+                                <button
+                                    onClick={() => toggleDropdown(livro.book_id)}
+                                    className={`opacity-60 group-hover:opacity-100 ${openDropdownId ? "opacity-100" : ""} duration-300 ease-in-out p-1 text-2xl rounded-full bg-white text-[#1a1a1a] cursor-pointer outline outline-[#797979] shadow-md hover:bg-[#fbfbfb]`}
+                                >
+
+                                    <BsThreeDots />
+                                </button>
+                            </div>
 
                             {openDropdownId === livro.book_id && (
                                 <div
@@ -112,7 +141,7 @@ export default function BibliotecaAuthComp() {
                                     <ul className="flex flex-col text-[#1a1a1a]">
 
                                         <li className="px-4 py-2 flex gap-x-2 items-center  cursor-pointer hover:text-black duration-150 ease-in-out"
-                                            onClick={() => {setExpandedImg(livro.cover_img);setOpenDropdownId(null)}}
+                                            onClick={() => { setExpandedImg(livro.cover_img); setOpenDropdownId(null) }}
                                         >
                                             <span>
                                                 <GiExpand />
@@ -121,7 +150,7 @@ export default function BibliotecaAuthComp() {
                                         </li>
 
                                         <li className="px-4 py-2 flex gap-x-2 items-center  cursor-pointer hover:text-green-600 duration-150 ease-in-out"
-
+                                            onClick={() => handleMarkAsRead(livro.book_id)}
                                         >
                                             <span>
                                                 <FaCheck />
@@ -138,7 +167,7 @@ export default function BibliotecaAuthComp() {
                                             <span>
                                                 <RiDeleteBin6Line />
                                             </span>
-                                            <span>Remover livro</span>
+                                            <span>Remover livro </span>
                                         </li>
                                     </ul>
                                 </div>
@@ -210,7 +239,7 @@ export default function BibliotecaAuthComp() {
                                 ></div>
 
                                 <div className="relative max-w-4xl w-[90%] max-h-[90vh] overflow-auto"
-                                onClick={(e) => e.stopPropagation()}
+                                    onClick={(e) => e.stopPropagation()}
                                 >
                                     <img
                                         src={expandedImg}
@@ -218,7 +247,7 @@ export default function BibliotecaAuthComp() {
                                         className="w-full h-auto object-contain rounded-xl shadow-2xl border"
                                     />
                                     <span className="absolute top-4 right-4 cursor-pointer opacity-40 hover:opacity-100 duration-150 ease-in-out text-4xl"
-                                    onClick={() => setExpandedImg(null)}
+                                        onClick={() => setExpandedImg(null)}
                                     >
                                         <IoCloseCircleOutline />
                                     </span>

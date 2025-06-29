@@ -5,6 +5,7 @@ import { IoCloseCircleOutline } from "react-icons/io5";
 
 import { GiOpenBook } from "react-icons/gi";
 import { GiBookmarklet } from "react-icons/gi";
+import { FaCheck } from "react-icons/fa6";
 
 import AdicionarLivroGuest from "@/app/components/(guest)/AdicionarLivroGuest";
 import { useAuthStore } from "@/app/stores/session-store";
@@ -68,7 +69,7 @@ export default function Biblioteca() {
 
             {/* Barra de Pesquisa */}
             <div className="mt-1 flex flex-col sm:flex-row items-center gap-y-2">
-              <div className="flex w-full bg-white shadow items-center rounded ease-in-out duration-100 focus-within:outline-2 focus-within:outline-[#b03a2e] overflow-hidden">
+              <div className="flex w-full bg-white shadow items-center outline outline-[#e0e0e0] rounded ease-in-out duration-100 focus-within:outline-2 focus-within:outline-[#b03a2e] overflow-hidden">
                 <input
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}

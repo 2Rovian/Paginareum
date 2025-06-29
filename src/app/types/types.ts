@@ -10,6 +10,7 @@ export interface Livro {
 export interface Book {
   book_id: number;
   created_at: string;
+  read_status: string;
   author?: string;
   title: string;
   pages?: number;
