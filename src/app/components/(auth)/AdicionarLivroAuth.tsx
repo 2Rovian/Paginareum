@@ -189,7 +189,7 @@ export default function AdicionarLivroAuth() {
         )}
       </div>
   
-      <div className="flex gap-x-2 items-center">
+      <div className="flex flex-col sm:flex-row gap-x-2 gap-y-2 sm:items-center">
         <input
           type="text"
           placeholder="Categoria"

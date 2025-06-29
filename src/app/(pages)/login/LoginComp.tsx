@@ -1,5 +1,5 @@
 'use client'
-import { FormEvent, useState } from "react"
+import { FormEvent, useState, useEffect } from "react"
 import ProvidersComp from "./ProvidersComp";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
@@ -30,6 +30,13 @@ export default function LoginComp() {
     const [ShowPassword, setShowPassword] = useState<boolean>(false);
 
     const router = useRouter();
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            router.push('/')
+        }
+    }, [isAuthenticated])
+
 
     function handleChange() {
         setIsLogin(!isLogin);
@@ -79,7 +86,7 @@ export default function LoginComp() {
                     toast.success("Login feito com sucesso");
                     setAuthenticated(true);
                     router.push('/')
-                    
+
                 }
 
             } else {
@@ -127,20 +134,8 @@ export default function LoginComp() {
     }
 
     if (isAuthenticated) return (
-        <div className="max-w-md mx-auto mt-12 p-6 bg-[#f6f1e7] border flex flex-col justify-center border-[#6b705c] rounded-xl shadow-md text-center">
-            <MdAccountBox className="text-7xl mb-2 mx-auto text-[#b03a2e]" />
-            <h2 className="text-2xl font-semibold text-[#1a1a1a] mb-3">
-                Você está conectado
-            </h2>
-            <p className="text-[#6b705c] mb-6">
-                Acesse a página inicial para explorar os conteúdos disponíveis.
-            </p>
-            <Link
-                href="/"
-                className="inline-block bg-[#b03a2e] hover:bg-[#a93226] text-white px-6 py-2 rounded-lg font-semibold transition-colors duration-200"
-            >
-                Retornar à Home
-            </Link>
+        <div className="col-span-full flex justify-center py-10">
+            <div className="animate-spin rounded-full size-44 border-t-4 border-b-4 border-[#b03a2e]"></div>
         </div>
 
     )

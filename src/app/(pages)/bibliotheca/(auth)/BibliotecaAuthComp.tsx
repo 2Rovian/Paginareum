@@ -82,7 +82,7 @@ export default function BibliotecaAuthComp() {
 
     return (
         <>
-            <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-2">
                 {books.map((livro) => (
                     <article
                         key={livro.book_id}
@@ -148,7 +148,7 @@ export default function BibliotecaAuthComp() {
                         {/* MODAL */}
                         {showDeleteBook && (
                             <div
-                                className="fixed inset-0 flex justify-center items-center z-50"
+                                className="fixed inset-0 z-50 flex items-center justify-center "
                                 onClick={() => setShowDeleteBook(false)}
                             >
                                 {/* Fundo escuro com blur */}
@@ -159,7 +159,7 @@ export default function BibliotecaAuthComp() {
 
                                 {/* Modal */}
                                 <div
-                                    className="bg-white p-3 rounded-xl shadow-2xl z-50 max-w-md w-[90%] relative border border-[#b03a2e]/30"
+                                    className="bg-white p-6 rounded-xl shadow-2xl max-w-md w-[90%] relative border border-[#b03a2e]/30"
                                     onClick={(e) => e.stopPropagation()}
                                 >
 
@@ -199,7 +199,7 @@ export default function BibliotecaAuthComp() {
                         {/* MODAL */}
                         {expandedImg && (
                             <div
-                                className="fixed inset-0 flex justify-center items-center "
+                                className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm "
                                 onClick={() => setExpandedImg(null)}
                             >
 
@@ -209,13 +209,13 @@ export default function BibliotecaAuthComp() {
                                     onClick={() => setExpandedImg(null)}
                                 ></div>
 
-                                <div className="z-50 relative"
+                                <div className="relative max-w-4xl w-[90%] max-h-[90vh] overflow-auto"
                                 onClick={(e) => e.stopPropagation()}
                                 >
                                     <img
                                         src={expandedImg}
                                         alt={`Imagem do livro "${livro.title}" `}
-                                        className="w-full h-auto max-h-[80vh] object-contain rounded-xl shadow-xl border"
+                                        className="w-full h-auto object-contain rounded-xl shadow-2xl border"
                                     />
                                     <span className="absolute top-4 right-4 cursor-pointer opacity-40 hover:opacity-100 duration-150 ease-in-out text-4xl"
                                     onClick={() => setExpandedImg(null)}

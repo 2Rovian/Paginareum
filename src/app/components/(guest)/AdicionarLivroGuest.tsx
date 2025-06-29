@@ -75,7 +75,7 @@ export default function AdicionarLivros({ onAdd }: { onAdd?: () => void }) {
         className="bg-white px-3 py-2 rounded shadow transition-all duration-150 focus:outline-2 focus:outline-[#b03a2e]"
       />
 
-      <div className="flex gap-x-2 items-center">
+      <div className="flex flex-col sm:flex-row gap-x-2 gap-y-2 sm:items-center">
         <input
           type="text"
           placeholder="Categoria"
