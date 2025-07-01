@@ -3,25 +3,25 @@ import { useState, useEffect } from "react";
 import NavbarComp from "../../components/Navbar";
 import { IoCloseCircleOutline } from "react-icons/io5";
 
-import { GiOpenBook } from "react-icons/gi";
+import { GiOpenBook, GiWhiteBook } from "react-icons/gi";
 
 import AdicionarLivroGuest from "@/app/components/(guest)/AdicionarLivroGuest";
 import { useAuthStore } from "@/app/stores/session-store";
 import AdicionarLivroAuth from "@/app/components/(auth)/AdicionarLivroAuth";
 import BibliotecaAuthComp from "./(auth)/BibliotecaAuthComp";
 import BibliotecaGuestComp from "./(guest)/BibliotecaGuestComp";
-import { IoSearch } from "react-icons/io5";
-import LoadingComp from "@/app/components/LoadingComp";
-import { Book } from "@/app/types/types";
+import { FaCheck } from "react-icons/fa6";
+import { MdAutoStories } from "react-icons/md";
 
 export default function Biblioteca() {
   const [mostrarAddLivro, setMostrarAddLivro] = useState<boolean>(false);
 
   const [inputFocused, setInputFocused] = useState<boolean>(false);
 
-  const [searchType, setSearchType] = useState<"título" | "categoria">("título");
+  const [searchType, setSearchType] = useState<"title" | "category" | "author">("title");
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [read_status_state, setRead_status_state] = useState<null | "unread" | "in_progress" | "read">(null);
 
   const [hydrated, setHydrated] = useState(false);
   const { isAuthenticated } = useAuthStore();
@@ -32,11 +32,15 @@ export default function Biblioteca() {
   }, []);
 
   const handleToggleSearchType = () => {
-    if(searchType === "título"){
-      setSearchType("categoria")
+    if (searchType === "title") {
+      setSearchType("category")
       return
-    } 
-    setSearchType("título")
+    }
+    if (searchType === "category") {
+      setSearchType("author")
+      return
+    }
+    setSearchType("title")
   }
 
   return (
@@ -69,11 +73,11 @@ export default function Biblioteca() {
               <div className="flex w-full bg-white shadow items-center outline outline-[#e0e0e0] rounded ease-in-out duration-100 focus-within:outline-2 focus-within:outline-[#b03a2e] overflow-hidden">
                 <input
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => {setSearchTerm(e.target.value); setRead_status_state(null)}}
                   onFocus={() => setInputFocused(true)}
                   onBlur={() => setInputFocused(false)}
                   maxLength={300}
-                  placeholder={`Buscar livro por ${searchType}...`}
+                  placeholder={`Buscar livro por ${searchType == "title" ? "título" : searchType == "category" ? "categoria" : "autor"}...`}
                   className="px-3 py-2 rounded bg-white  grow focus:outline-none"
                 />
                 <button
@@ -82,13 +86,69 @@ export default function Biblioteca() {
                 >
                   {/* <span>Buscar Livro</span> */}
                   {/* <IoSearch /> */}
-                  <span>{searchType.replace(/^./, searchType[0].toUpperCase())}</span>
+                  <span>{searchType == "title" ? "Título" : searchType == "category" ? "Categoria" : "Autor"}</span>
+                  {/* <span>{searchType == "title" ?"título":"categoria".replace(/^./, searchType[0].toUpperCase())}</span> */}
                 </button>
-                
+
               </div>
 
             </div>
-            
+
+            <div className="flex justify-center sm:justify-start">
+              <ul className="flex w-fit items-center gap-x-1 bg-[#f0e6d6] p-1 rounded-lg shadow-inner">
+                <li >
+                  <button
+                    className={`px-4 py-1 text-sm font-medium rounded-lg transition-all duration-200 flex gap-x-1 cursor-pointer items-center ${read_status_state === 'unread'
+                      ? 'bg-[#b03a2e] text-[#f6f1e7] shadow-md'
+                      : 'text-[#5a4a3a] hover:bg-[#e6d9c5]'
+                      }`}
+                    onClick={() => {
+                      if(read_status_state == "unread"){
+                        setRead_status_state(null)
+                      } else {setRead_status_state("unread")}
+                    }}
+                    
+                  >
+                    <GiWhiteBook />
+                    <span>Não lidos</span>
+                  </button>
+                </li>
+
+                <li >
+                  <button
+                    className={`px-4 py-1 text-sm font-medium rounded-lg transition-all duration-200 flex gap-x-1 cursor-pointer items-center ${read_status_state === 'in_progress'
+                      ? 'bg-[#b03a2e] text-[#f6f1e7] shadow-md'
+                      : 'text-[#5a4a3a] hover:bg-[#e6d9c5]'
+                      }`}
+                    onClick={() => {
+                      if(read_status_state == "in_progress"){
+                        setRead_status_state(null)
+                      } else {setRead_status_state("in_progress")}
+                    }}
+                  >
+                    <MdAutoStories />
+                    <span>Lendo</span>
+                  </button>
+                </li>
+                <li >
+                  <button
+                    className={`px-4 py-1 text-sm font-medium rounded-lg transition-all duration-200 flex gap-x-1 cursor-pointer items-center ${read_status_state === 'read'
+                      ? 'bg-[#b03a2e] text-[#f6f1e7] shadow-md'
+                      : 'text-[#5a4a3a] hover:bg-[#e6d9c5]'
+                      }`}
+                    onClick={() => {
+                      if(read_status_state == "read"){
+                        setRead_status_state(null)
+                      } else {setRead_status_state("read")}
+                    }}
+                  >
+                    <FaCheck />
+                    <span>Lidos</span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+
           </div>
 
           {/* MODAL */}
@@ -130,7 +190,11 @@ export default function Biblioteca() {
               <div className="animate-spin rounded-full size-30 border-t-4 border-b-4 border-[#b03a2e]"></div>
             </div>
           ) : isAuthenticated ? (
-            <BibliotecaAuthComp SearchBook={searchTerm} />
+            <BibliotecaAuthComp
+              SearchBook={searchTerm}
+              SearchType={searchType}
+              read_status_state={read_status_state}
+            />
           ) : (
             <BibliotecaGuestComp />
           )}

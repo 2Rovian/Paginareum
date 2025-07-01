@@ -8,20 +8,22 @@ import toast from "react-hot-toast"
 import { BsThreeDots } from "react-icons/bs";
 import { FaCheck } from "react-icons/fa6";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { GiExpand } from "react-icons/gi";
+import { GiExpand, GiWhiteBook } from "react-icons/gi";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { MdAutoStories } from "react-icons/md";
-import { MdOutlineClose } from "react-icons/md";
 
 // -----
 import { useDebounce } from 'use-debounce'
 import { Book } from "@/app/types/types";
+import { off } from "process";
 
-interface SearchBookProps{
+interface SearchBookProps {
     SearchBook?: string;
+    SearchType: "title" | "category" | "author";
+    read_status_state: null | "unread" | "in_progress" | "read";
 }
 
-export default function BibliotecaAuthComp({ SearchBook = "" }: SearchBookProps) {
+export default function BibliotecaAuthComp({ SearchBook = "", SearchType, read_status_state = null }: SearchBookProps) {
     const [books, setBooks] = useState<Book[]>([]);
 
     const [showDeleteBook, setShowDeleteBook] = useState<boolean>(false);
@@ -54,9 +56,27 @@ export default function BibliotecaAuthComp({ SearchBook = "" }: SearchBookProps)
     }, []);
     // ----------------------------
 
+    // buscar livro por read_status
+    useEffect(() => {
+        const fetchByReadStatus = async () => {
+            setIsLoading(true)
+            const { data: dataReadStatus } = await supabase
+                .from("books")
+                .select()
+                .eq("read_status", read_status_state)
+                .order("created_at", { ascending: false })
+
+            setIsLoading(false)
+            setBooks(dataReadStatus || [])
+        }
+
+        fetchByReadStatus()
+    }, [read_status_state]);
+
     // busca por livros dado o input
     useEffect(() => {
         const fetchByBookName = async () => {
+
             if (!debounceBook.trim()) {
                 fetchAllBooks();
                 return
@@ -66,14 +86,15 @@ export default function BibliotecaAuthComp({ SearchBook = "" }: SearchBookProps)
             const { data } = await supabase
                 .from("books")
                 .select()
-                .textSearch("title", debounceBook.trim())
+                .textSearch(SearchType, debounceBook.trim())
+                .order("created_at", { ascending: false })
 
             setIsLoading(false)
             setBooks(data || []);
         }
 
         fetchByBookName()
-    }, [debounceBook]);
+    }, [debounceBook, SearchType]);
     // -------------------------------
 
     const fetchAllBooks = async () => {
@@ -109,7 +130,7 @@ export default function BibliotecaAuthComp({ SearchBook = "" }: SearchBookProps)
 
         toast.success("Livro removido");
         setShowDeleteBook(false);
-        
+
     }
 
     const handleMarkAsRead = async (id: number) => {
@@ -143,7 +164,7 @@ export default function BibliotecaAuthComp({ SearchBook = "" }: SearchBookProps)
 
         toast.success("Livro marcado como em progresso");
         setOpenDropdownId(null);
-        
+
     }
 
     const handleMarkAsUnread = async (id: number) => {
@@ -162,7 +183,7 @@ export default function BibliotecaAuthComp({ SearchBook = "" }: SearchBookProps)
         setOpenDropdownId(null);
     }
 
-    if(isLoading) return(
+    if (isLoading) return (
         <div className="col-span-full flex justify-center py-10">
             <div className="animate-spin rounded-full size-30 border-t-4 border-b-4 border-[#b03a2e]"></div>
         </div>
@@ -170,8 +191,31 @@ export default function BibliotecaAuthComp({ SearchBook = "" }: SearchBookProps)
 
     if (debounceBook.trim() && books.length === 0) return (
         <div className="text-center py-10 overflow-hidden">
-            <p className="text-2xl text-[#b03a2e]">
-                Não há livros de nome "{debounceBook}"
+            <div className="max-w-md mx-auto">
+                <GiWhiteBook className="text-5xl text-[#b03a2e] mx-auto mb-4" />
+                <h3 className="text-xl font-serif text-[#1a1a1a] mb-2">
+                    "O mistério de <span className="text-[#b03a2e]">{debounceBook}</span>"
+                </h3>
+                <p className="text-[#5a4a3a]">
+                    Parece que este livro ainda não está em sua biblioteca.
+                    Seria uma obra perdida ou uma nova aventura por adicionar?
+                </p>
+            </div>
+        </div>)
+
+    if (books.length == 0 && read_status_state) return (
+        <div className="text-center py-10 overflow-hidden">
+            <p className="text-2xl text-[#b03a2e] font-serif italic">
+                {read_status_state === "read"
+                    ? "Sua estante de livros lidos está esperando por novas aventuras..."
+                    : read_status_state === "in_progress"
+                        ? "Nenhuma jornada literária em progresso no momento"
+                        : "A terra virgem das páginas não exploradas aguarda sua curiosidade"}
+            </p>
+            <p className="text-[#5a4a3a] mt-2">
+                {read_status_state === "read"
+                    ? "Que tal adicionar suas próximas conquistas literárias?"
+                    : "O primeiro passo começa com um livro aberto"}
             </p>
         </div>
     )
@@ -248,7 +292,8 @@ export default function BibliotecaAuthComp({ SearchBook = "" }: SearchBookProps)
                                                 onClick={() => handleMarkAsUnread(livro.book_id)}
                                             >
                                                 <span>
-                                                    <MdOutlineClose />
+                                                    <GiWhiteBook />
+
                                                 </span>
                                                 <span>Não lido</span>
                                             </li>
