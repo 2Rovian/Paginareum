@@ -4,8 +4,6 @@ import NavbarComp from "../../components/Navbar";
 import { IoCloseCircleOutline } from "react-icons/io5";
 
 import { GiOpenBook } from "react-icons/gi";
-import { GiBookmarklet } from "react-icons/gi";
-import { FaCheck } from "react-icons/fa6";
 
 import AdicionarLivroGuest from "@/app/components/(guest)/AdicionarLivroGuest";
 import { useAuthStore } from "@/app/stores/session-store";
@@ -14,13 +12,16 @@ import BibliotecaAuthComp from "./(auth)/BibliotecaAuthComp";
 import BibliotecaGuestComp from "./(guest)/BibliotecaGuestComp";
 import { IoSearch } from "react-icons/io5";
 import LoadingComp from "@/app/components/LoadingComp";
+import { Book } from "@/app/types/types";
 
 export default function Biblioteca() {
   const [mostrarAddLivro, setMostrarAddLivro] = useState<boolean>(false);
+
   const [inputFocused, setInputFocused] = useState<boolean>(false);
 
+  const [searchType, setSearchType] = useState<"título" | "categoria">("título");
+
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("Todas");
 
   const [hydrated, setHydrated] = useState(false);
   const { isAuthenticated } = useAuthStore();
@@ -30,17 +31,13 @@ export default function Biblioteca() {
     return () => clearTimeout(timeout);
   }, []);
 
-
-  // if (!hydrated) {
-  //   return (
-  //     <>
-  //       <div className="flex justify-center items-center min-h-screen bg-[#f6f1e7]">
-  //         <div className="animate-spin rounded-full size-10 border-t-4 border-b-4 border-[#b03a2e]"></div>
-  //       </div>
-  //     </>
-
-  //   );
-  // }
+  const handleToggleSearchType = () => {
+    if(searchType === "título"){
+      setSearchType("categoria")
+      return
+    } 
+    setSearchType("título")
+  }
 
   return (
     <>
@@ -75,25 +72,23 @@ export default function Biblioteca() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onFocus={() => setInputFocused(true)}
                   onBlur={() => setInputFocused(false)}
-                  placeholder="Buscar livro por título ou categoria..."
+                  maxLength={300}
+                  placeholder={`Buscar livro por ${searchType}...`}
                   className="px-3 py-2 rounded bg-white  grow focus:outline-none"
                 />
                 <button
-                  className={`py-3 sm:hidden focus:border-l-2 text-[#b03a2e] px-4 cursor-pointer hover:text-[#e6c46c] duration-100 ease-in-out ${inputFocused ? 'border-l-2 border-[#b03a2e]' : ''}`}
-
+                  className={`py-3 focus:border-l-2 text-[#b03a2e] px-4 cursor-pointer duration-100 hover:text-[#f6f1e7] hover:border-l-[#b03a2e] hover:bg-[#b03a2e] ease-in-out ${inputFocused ? 'border-l-2 border-[#b03a2e]' : ''}`}
+                  onClick={handleToggleSearchType}
                 >
                   {/* <span>Buscar Livro</span> */}
-                  <IoSearch />
+                  {/* <IoSearch /> */}
+                  <span>{searchType.replace(/^./, searchType[0].toUpperCase())}</span>
                 </button>
-                <button
-                  className={`py-3 hidden sm:flex focus:border-l-2 text-[#b03a2e] px-4 cursor-pointer hover:text-[#e6c46c] duration-100 ease-in-out ${inputFocused ? 'border-l-2 border-[#b03a2e]' : ''}`}
-
-                >
-                  <span>Buscar Livro</span>
-                </button>
+                
               </div>
 
             </div>
+            
           </div>
 
           {/* MODAL */}
@@ -130,12 +125,15 @@ export default function Biblioteca() {
             </div>
           )}
 
-          {!hydrated ?
-            <LoadingComp /> :
-            isAuthenticated ?
-              <BibliotecaAuthComp /> :
-              <BibliotecaGuestComp />
-          }
+          {!hydrated ? (
+            <div className="col-span-full flex justify-center py-10">
+              <div className="animate-spin rounded-full size-30 border-t-4 border-b-4 border-[#b03a2e]"></div>
+            </div>
+          ) : isAuthenticated ? (
+            <BibliotecaAuthComp SearchBook={searchTerm} />
+          ) : (
+            <BibliotecaGuestComp />
+          )}
 
         </main>
       </div>

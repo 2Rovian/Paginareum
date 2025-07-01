@@ -10,19 +10,29 @@ import { FaCheck } from "react-icons/fa6";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { GiExpand } from "react-icons/gi";
 import { IoCloseCircleOutline } from "react-icons/io5";
-// -----
+import { MdAutoStories } from "react-icons/md";
+import { MdOutlineClose } from "react-icons/md";
 
+// -----
+import { useDebounce } from 'use-debounce'
 import { Book } from "@/app/types/types";
 
-export default function BibliotecaAuthComp() {
+interface SearchBookProps{
+    SearchBook?: string;
+}
+
+export default function BibliotecaAuthComp({ SearchBook = "" }: SearchBookProps) {
     const [books, setBooks] = useState<Book[]>([]);
 
     const [showDeleteBook, setShowDeleteBook] = useState<boolean>(false);
-    // const [showExpandedIMG, setShowExpandIMG] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
     const [expandedImg, setExpandedImg] = useState<string | null>(null);
 
     const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+    const [debounceBook] = useDebounce(SearchBook, 1000)
 
     const toggleDropdown = (id: number) => {
         setOpenDropdownId(prev => (prev === id ? null : id));
@@ -42,27 +52,48 @@ export default function BibliotecaAuthComp() {
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+    // ----------------------------
 
+    // busca por livros dado o input
+    useEffect(() => {
+        const fetchByBookName = async () => {
+            if (!debounceBook.trim()) {
+                fetchAllBooks();
+                return
+            }
+            setIsLoading(true)
 
-    const fetchBooks = async () => {
+            const { data } = await supabase
+                .from("books")
+                .select()
+                .textSearch("title", debounceBook.trim())
+
+            setIsLoading(false)
+            setBooks(data || []);
+        }
+
+        fetchByBookName()
+    }, [debounceBook]);
+    // -------------------------------
+
+    const fetchAllBooks = async () => {
         const { data, error } = await supabase
             .from("books")
             .select("*")
-            .order("created_at", { ascending: false })
+            .order("created_at", { ascending: false });
 
         if (error) {
-            console.error("Erro ao buscar livros", error.message)
-            toast.error("Erro ao buscar livros")
-            return;
+            console.error("Erro ao buscar livros:", error);
+            toast.error("Erro ao carregar livros");
+            return
         }
 
-        setBooks(data);
-    }
+        setBooks(data || []);
+    };
 
     useEffect(() => {
-        fetchBooks()
-
-    }, []);
+        fetchAllBooks();
+    }, []); // 
 
     const handleDeleteBook = async (id: number) => {
         const { error } = await supabase
@@ -78,7 +109,7 @@ export default function BibliotecaAuthComp() {
 
         toast.success("Livro removido");
         setShowDeleteBook(false);
-        fetchBooks();
+        
     }
 
     const handleMarkAsRead = async (id: number) => {
@@ -93,10 +124,57 @@ export default function BibliotecaAuthComp() {
             return;
         }
 
-        toast.success("Livro Lido!");
+        toast.success("Livro marcado como lido");
+        setOpenDropdownId(null);
+
+    }
+
+    const handleMarkAsReading = async (id: number) => {
+        const { error } = await supabase
+            .from("books")
+            .update({ read_status: "in_progress" })
+            .eq("book_id", id)
+
+        if (error) {
+            console.error("Erro ao marcar livro como em progresso:", error.message);
+            toast.error("Erro ao marcar livro como em progresso");
+            return;
+        }
+
+        toast.success("Livro marcado como em progresso");
         setOpenDropdownId(null);
         
     }
+
+    const handleMarkAsUnread = async (id: number) => {
+        const { error } = await supabase
+            .from("books")
+            .update({ read_status: "unread" })
+            .eq("book_id", id)
+
+        if (error) {
+            console.error("Erro ao marcar livro como não livro:", error.message);
+            toast.error("Erro ao marcar livro como não livro");
+            return;
+        }
+
+        toast.success("Livro marcado como não lido");
+        setOpenDropdownId(null);
+    }
+
+    if(isLoading) return(
+        <div className="col-span-full flex justify-center py-10">
+            <div className="animate-spin rounded-full size-30 border-t-4 border-b-4 border-[#b03a2e]"></div>
+        </div>
+    )
+
+    if (debounceBook.trim() && books.length === 0) return (
+        <div className="text-center py-10 overflow-hidden">
+            <p className="text-2xl text-[#b03a2e]">
+                Não há livros de nome "{debounceBook}"
+            </p>
+        </div>
+    )
 
     return (
         <>
@@ -115,18 +193,33 @@ export default function BibliotecaAuthComp() {
                                 loading="lazy"
                             />
 
-                            <div className="absolute items-center flex justify-between px-2 top-2 w-full">
+                            <div className={`absolute flex px-2 top-2 w-full
+                                ${livro.read_status == "read" || livro.read_status == "in_progress" ? "justify-between items-center" : "justify-end "}`}>
 
                                 {livro.read_status == "read" && <div
-                                    className={` ${openDropdownId ? "opacity-100" : ""} py-1 text-sm text-green-700 rounded-full bg-white cursor-pointer flex items-center gap-x-2 px-2 outline  shadow-md hover:bg-[#fbfbfb]`}
+                                    className={` ${openDropdownId ? "opacity-100" : ""} py-1 text-sm text-[#b03a2e] rounded-full bg-white cursor-pointer flex items-center gap-x-2 px-2 outline  shadow-md `}
                                 >
                                     <FaCheck />
                                     <span>Lido</span>
                                 </div>}
 
+                                {livro.read_status == "in_progress" && <div
+                                    className={` ${openDropdownId ? "opacity-100" : ""} py-1 text-sm text-[#b03a2e] rounded-full bg-white cursor-pointer flex items-center gap-x-2 px-2 outline  shadow-md `}
+                                >
+                                    <MdAutoStories />
+                                    <span>Em progresso</span>
+                                </div>}
+
+                                {/* <div
+                                    className={` ${openDropdownId ? "opacity-100" : ""} py-1 text-sm text-green-700 rounded-full bg-white cursor-pointer flex items-center gap-x-2 px-2 outline  shadow-md hover:bg-[#fbfbfb]`}
+                                >
+                                    <FaCheck />
+                                    <span>Lido</span>
+                                </div> */}
+
                                 <button
                                     onClick={() => toggleDropdown(livro.book_id)}
-                                    className={`opacity-60 group-hover:opacity-100 ${openDropdownId ? "opacity-100" : ""} duration-300 ease-in-out p-1 text-2xl rounded-full bg-white text-[#1a1a1a] cursor-pointer outline outline-[#797979] shadow-md hover:bg-[#fbfbfb]`}
+                                    className={`opacity-60 group-hover:opacity-100 ${openDropdownId ? "opacity-100" : ""} duration-300 ease-in-out p-1 text-xl rounded-full bg-white text-[#1a1a1a] cursor-pointer outline outline-[#797979] shadow-md hover:bg-[#fbfbfb]`}
                                 >
 
                                     <BsThreeDots />
@@ -140,7 +233,7 @@ export default function BibliotecaAuthComp() {
                                 >
                                     <ul className="flex flex-col text-[#1a1a1a]">
 
-                                        <li className="px-4 py-2 flex gap-x-2 items-center  cursor-pointer hover:text-black duration-150 ease-in-out"
+                                        <li className="px-4 py-2 flex gap-x-2 items-center  cursor-pointer hover:text-[#b03a2e] duration-150 ease-in-out"
                                             onClick={() => { setExpandedImg(livro.cover_img); setOpenDropdownId(null) }}
                                         >
                                             <span>
@@ -149,16 +242,44 @@ export default function BibliotecaAuthComp() {
                                             <span>Expandir Imagem</span>
                                         </li>
 
-                                        <li className="px-4 py-2 flex gap-x-2 items-center  cursor-pointer hover:text-green-600 duration-150 ease-in-out"
-                                            onClick={() => handleMarkAsRead(livro.book_id)}
+                                        {livro.read_status == "read" ?
+
+                                            <li className="px-4 py-2 flex gap-x-2 items-center  cursor-pointer hover:text-[#b03a2e] duration-150 ease-in-out"
+                                                onClick={() => handleMarkAsUnread(livro.book_id)}
+                                            >
+                                                <span>
+                                                    <MdOutlineClose />
+                                                </span>
+                                                <span>Não lido</span>
+                                            </li>
+                                            :
+                                            // <li className="px-4 py-2 flex gap-x-2 items-center  cursor-pointer hover:text-green-600 duration-150 ease-in-out"
+                                            //     onClick={() => handleMarkAsRead(livro.book_id)}
+                                            // >
+                                            //     <span>
+                                            //         <MdOutlineClose />
+                                            //     </span>
+                                            //     <span>Não lido</span>
+                                            // </li>
+                                            <li className="px-4 py-2 flex gap-x-2 items-center  cursor-pointer hover:text-[#b03a2e] duration-150 ease-in-out"
+                                                onClick={() => handleMarkAsRead(livro.book_id)}
+                                            >
+                                                <span>
+                                                    <FaCheck />
+                                                </span>
+                                                <span>Lido</span>
+                                            </li>
+                                        }
+
+                                        <li className="px-4 py-2 flex gap-x-2 items-center  cursor-pointer hover:text-[#b03a2e] duration-150 ease-in-out"
+                                            onClick={() => handleMarkAsReading(livro.book_id)}
                                         >
                                             <span>
-                                                <FaCheck />
+                                                <MdAutoStories />
                                             </span>
-                                            <span>Marcar como lido</span>
+                                            <span>Em progresso</span>
                                         </li>
 
-                                        {/* <GiExpand /> */}
 
                                         <li className="px-4 py-2 flex gap-x-2 items-center  cursor-pointer hover:text-[#b03a2e] duration-150 ease-in-out
                                         "
