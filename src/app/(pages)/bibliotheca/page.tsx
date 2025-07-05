@@ -94,7 +94,7 @@ export default function Biblioteca() {
 
             </div>
 
-            <div className="flex justify-center sm:justify-start">
+            <div className="flex ">
               <ul className="flex w-fit items-center gap-x-1 bg-[#f0e6d6] p-1 rounded-lg shadow-inner">
                 <li >
                   <button
