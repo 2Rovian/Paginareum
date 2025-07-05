@@ -24,6 +24,7 @@ export default function Navbar_UL() {
     const [showMenu, setShowMenu] = useState<boolean>(false);
     const menuRef = useRef<HTMLUListElement | null>(null);
     const router = useRouter();
+    const [avatar_url, setAvatar_url] = useState<string | null>(null);
 
     const { isAuthenticated } = useAuthStore()
     const setAuthenticated = useAuthStore((state) => state.setAuthenticated)
@@ -35,13 +36,42 @@ export default function Navbar_UL() {
         // { label: "Login", href: "/login", icon: <RiLoginBoxLine /> },
     ];
 
+    useEffect(() => {
+        const fetchAvatar = async () => {
+            const { data: sessionData } = await supabase.auth.getSession();
+
+            const userID = sessionData.session?.user?.id;
+            const { data } = await supabase
+                .from("profiles")
+                .select("avatar_url")
+                .eq("profile_id", userID)
+
+            setAvatar_url(data?.[0].avatar_url || null)
+
+        }
+
+        fetchAvatar();
+    }, []);
+
 
     const linksAuth = [
         { label: "Home", href: "/", icon: <IoHome /> },
         { label: "Bibliotheca", href: "/bibliotheca", icon: <IoLibrary /> },
-        { label: "Perfil", href: "/perfil", icon: <MdAccountBox /> },
         { label: "Sobre", href: "/sobre", icon: <FaCircleInfo /> },
-        // { label: "Logout", href: "/logout", icon: <RiLogoutBoxLine /> },
+        {
+            label: "Perfil",
+            href: "/perfil",
+            icon: avatar_url ? (
+                <img
+                    src={avatar_url}
+                    alt="Avatar"
+                    className="size-6 rounded-full object-cover"
+                />
+            ) : (
+                <MdAccountBox />
+            )
+        },
+        
     ];
 
     async function handleLogout() {
@@ -88,13 +118,12 @@ export default function Navbar_UL() {
                             className={`cursor-pointer transition hover:text-[#e6c46c] flex gap-x-2 items-center py-1 px-2 ${pathname === link.href ? 'text-[#e6c46c]' : ''
                                 }`}
                         >
-                            {/* {link.label} */}
                             <span>{link.icon}</span>
                             <span>{link.label}</span>
                         </Link>
                     </li>
                 ))}
-                {isAuthenticated ?
+                {/* {isAuthenticated ?
                     <li>
                         <button
                             className={`cursor-pointer transition hover:text-[#e6c46c] flex gap-x-2 items-center py-1 px-2`}
@@ -106,6 +135,16 @@ export default function Navbar_UL() {
                         </button>
                     </li>
                     :
+                    <li >
+                        <Link
+                            href={'/login'}
+                            className={`cursor-pointer transition hover:text-[#e6c46c] flex gap-x-2 items-center py-1 px-2 ${pathname === '/login' ? 'text-[#e6c46c]' : ''}`}
+                        >
+                            <span><RiLoginBoxLine /></span>
+                            <span>Login</span>
+                        </Link>
+                    </li>} */}
+                    {!isAuthenticated &&
                     <li >
                         <Link
                             href={'/login'}
