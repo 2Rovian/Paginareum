@@ -46,7 +46,7 @@ export default function Biblioteca() {
   return (
     <>
       <NavbarComp />
-      <div className="max-w-5xl mx-auto lg:px-0 px-4">
+      <div className="max-w-7xl mx-auto xl:px-0 px-4">
         <main className="bg-[#f6f1e7] mt-10 pb-4 ">
           <div className="text-center justify-center mb-4 flex flex-col gap-y-2">
             <div className="flex  gap-y-1 flex-row items-center justify-between w-full">

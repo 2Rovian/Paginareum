@@ -1,0 +1,170 @@
+import { BsCalendar2DateFill } from "react-icons/bs";
+import Image from 'next/image';
+import Link from 'next/link';
+import NavbarComp from "@/app/components/Navbar";
+import BookImage from "./BookImage";
+import LerAgoraBtn from "@/app/(pages)/bibliotheca/LerAgoraBtn";
+
+// Cores da paleta
+// const colors = {
+// papiro: '#f6f1e7',
+// pompeiaRed: '#b03a2e',
+// nobleGold: '#e6c46c',
+// darkGray: '#1a1a1a',
+// oliveGreen: '#6b705c'
+// };
+
+export default async function BookDetails({
+    params,
+}: {
+    params: { book_title: string };
+}) {
+    const { book_title } = await params;
+    const decodedTitle = decodeURIComponent(book_title);
+
+    const response = await fetch(
+        `https://www.googleapis.com/books/v1/volumes?q=intitle:${decodedTitle}&maxResults=1`
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        return <p className={`text-center py-20 text-[#b03a2e]`}>Livro não encontrado</p>;
+    }
+
+    if (!data.items || data.items.length === 0) {
+        return (
+            <>
+                <NavbarComp />
+                <div className="max-w-7xl mx-auto px-4 xl:px-0 pb-12">
+                    <p>Livro não encontrado</p>
+                    <p>O Paginareum usa a tecnologia do googlebooksapi. O fato de você não encontrar a página de sobre do livro de título {book_title} não necessariamente indica que voce fez algo errado, este é o funcionamento da vida.</p>
+                </div>
+            </>
+
+        );
+    }
+
+    const bookData = data.items[0].volumeInfo;
+
+    return (
+        <>
+            <NavbarComp />
+            <div className="max-w-7xl mx-auto px-4 xl:px-0 pb-12" >
+                <main className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start mt-10">
+                    <div className="w-full h-fit flex items-center md:items-start flex-col gap-4">
+                        <div className='rounded-xl overflow-hidden shadow-md w-full h-fit '>
+                            <BookImage book_title={decodedTitle} />
+                        </div>
+
+                        {bookData.infoLink && (
+                            <div className="hidden md:block px-1">
+                                <h3 className="text-sm font-semibold">Mais informações</h3>
+                                <Link
+                                    href={bookData.infoLink}
+                                    target="_blank"
+                                >
+                                    <span className="hover:underline text-[#b03a2e]">Ver no Google Books</span>
+                                </Link>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Informações do livro */}
+                    <div className="md:col-span-2 flex flex-col gap-4 ">
+                        <div className="flex justify-between items-center">
+                            <h1 className="text-4xl font-bold" >{bookData.title}</h1>
+                            {/* <p>{decodedTitle}</p> */}
+                            <LerAgoraBtn book_title={decodedTitle} />
+                        </div>
+
+                        <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-[#6b705c] mt-0">
+                            {/* Data de publicação */}
+                            {bookData.publishedDate && (
+                                <span className="flex items-center gap-x-1">
+                                    <BsCalendar2DateFill />
+                                    {(() => {
+                                        const [year, month, day] = bookData.publishedDate.split("-");
+                                        if (!year || !month || !day) return bookData.publishedDate;
+                                        return `${day}/${month}/${year}`;
+                                    })()}
+                                </span>
+                            )}
+
+                            {/* Páginas */}
+                            {bookData.pageCount && (
+                                <span className="flex items-center gap-x-1">
+                                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M4 4h16v2H4zm0 4h16v2H4zm0 4h10v2H4z" />
+                                    </svg>
+                                    {bookData.pageCount} pages
+                                </span>
+                            )}
+
+                            {/* Idioma */}
+                            {bookData.language && (
+                                <span className="flex items-center gap-x-1">
+                                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 3l4.5 6h-9L12 3zm0 18l-4.5-6h9L12 21z" />
+                                    </svg>
+                                    {bookData.language.toUpperCase()}
+                                </span>
+                            )}
+
+                            {/* Editora */}
+                            {bookData.publisher && (
+                                <span className="flex items-center gap-x-1">
+                                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M5 4h14v2H5zM5 10h14v2H5zM5 16h14v2H5z" />
+                                    </svg>
+                                    {bookData.publisher}
+                                </span>
+                            )}
+
+                            {/* Autor */}
+                            {bookData.authors && (
+                                <div>
+                                    {/* <h3 className="text-sm font-semibold" >Authors</h3> */}
+                                    <div className="flex flex-wrap gap-2">
+                                        {bookData.authors.map((author: string, index: number) => (
+                                            <span
+                                                key={index}
+                                                className="px-3 py-1 rounded-full text-xs bg-[#b03a2e]/90 text-[#f6f1e7]"
+
+                                            >
+                                                {author}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+
+                        {bookData.subtitle && (
+                            <h2 className="text-xl italic text-[#1a1a1a]" >{bookData.subtitle}</h2>
+                        )}
+
+                        <p className="text-lg leading-relaxed mt-2" >
+                            {bookData.description || "Sem descrição disponível."}
+                        </p>
+
+                        {bookData.infoLink && (
+                            <div className='md:hidden'>
+                                <h3 className="text-sm font-semibold" >More Info</h3>
+                                <Link
+                                    href={bookData.infoLink}
+                                    target="_blank"
+
+                                >
+                                    <span className="hover:underline text-[#b03a2e]">View on Google Books</span>
+                                </Link>
+                            </div>
+                        )}
+                    </div>
+                </main>
+            </div>
+        </>
+
+    );
+}

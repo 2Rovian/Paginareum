@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <>
       <NavbarComp />
-      <div className="max-w-5xl lg:px-0 mx-auto px-4">
+      <div className="max-w-7xl lg:px-0 mx-auto px-4">
         <main className="bg-[#f6f1e7] mt-10 flex flex-col items-center justify-center text-center px-4 pb-4">
           <h1 className="text-4xl font-serif text-[#1a1a1a] mb-4">Bem-vindo ao <span className="text-[#b03a2e]">Paginareum</span></h1>
           <p className="text-[#6b705c] max-w-lg mb-6">

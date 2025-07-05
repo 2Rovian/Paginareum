@@ -16,6 +16,7 @@ import { MdAutoStories } from "react-icons/md";
 import { useDebounce } from 'use-debounce'
 import { Book } from "@/app/types/types";
 import { off } from "process";
+import Link from "next/link";
 
 interface SearchBookProps {
     SearchBook?: string;
@@ -222,7 +223,7 @@ export default function BibliotecaAuthComp({ SearchBook = "", SearchType, read_s
 
     return (
         <>
-            <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-2">
+            <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-2">
                 {books.map((livro) => (
                     <article
                         key={livro.book_id}
@@ -423,11 +424,12 @@ export default function BibliotecaAuthComp({ SearchBook = "", SearchType, read_s
                         )}
 
                         <div className="flex flex-col flex-1 p-3">
-                            <h3 className="text-xl font-semibold text-[#1a1a1a] mb-1 line-clamp-2 "
-                                title={livro.title}
-                            >
-                                {livro.title}
-                            </h3>
+                            <h3
+  className="text-lg font-semibold text-[#1a1a1a] mb-1 truncate"
+  title={livro.title}
+>
+  {livro.title}
+</h3>
 
                             <p className="text-sm text-[#3e3e3e] font-medium mb-0">
                                 por {livro.author || "Autor desconhecido"}
@@ -437,10 +439,16 @@ export default function BibliotecaAuthComp({ SearchBook = "", SearchType, read_s
                                 {livro.category || 'Sem categoria'}
                             </p>
 
-                            <div className="flex items-center justify-between mt-auto text-sm">
-                                <span className=" text-[#6b705c]">
+                            <div className="flex items-center justify-between mt-2 text-sm">
+                                {/* <span className=" text-[#6b705c]">
                                     {livro.pages} páginas
-                                </span>
+                                </span> */}
+                                <Link
+                                    href={`/bibliotheca/${(livro.title)}`}
+                                    className="hover:bg-[#f6f1e7] text-[#6b705c] hover:text-[#b03a2e] px-4 py-2 outline-2 rounded-lg transition-colors"
+                                >
+                                    Sobre
+                                </Link>
 
                                 <a
                                     href={livro.urlPath}

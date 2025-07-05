@@ -4,8 +4,8 @@ export default function SobrePage() {
     return (
         <>
             <NavbarComp />
-            <div className="max-w-5xl mx-auto px-4 lg:px-0">
-                <main className="bg-[#f6f1e7] border-2 border-[#b03a2e] my-10 px-6 py-10 rounded-lg shadow-sm rounded-xl">
+            <div className="max-w-7xl mx-auto px-4 xl:px-0">
+                <main className="bg-[#f6f1e7] border-2 border-[#b03a2e] my-10 px-6 py-10 rounded-lg shadow-sm ">
                     <section className="text-center mb-12">
                         <h1 className="text-4xl font-serif text-[#1a1a1a] mb-4">
                             O que é <span className="text-[#b03a2e]">Paginareum</span>?

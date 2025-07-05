@@ -10,7 +10,7 @@ const cinzelFont = Cinzel({
 export default function NavbarComp(){
     return(
         <header className="h-[80px] bg-[#b03a2e] text-[#f6f1e7] px-4 shadow ">
-            <div className="size-full max-w-5xl mx-auto flex items-center justify-between ">
+            <div className="size-full max-w-7xl mx-auto flex items-center justify-between ">
                 <div className={`${cinzelFont.className} text-3xl cursor-pointer`}><Link href={'/'}>Paginareum</Link></div>
                 
                 <Navbar_UL />
