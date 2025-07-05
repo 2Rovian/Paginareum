@@ -28,21 +28,36 @@ export default async function BookDetails({
 
     const data = await response.json();
 
-    if (!response.ok) {
-        return <p className={`text-center py-20 text-[#b03a2e]`}>Livro não encontrado</p>;
-    }
-
     if (!data.items || data.items.length === 0) {
         return (
             <>
                 <NavbarComp />
-                <div className="max-w-7xl mx-auto px-4 xl:px-0 pb-12">
-                    <p>Livro não encontrado</p>
-                    <p>O Paginareum usa a tecnologia do googlebooksapi. O fato de você não encontrar a página de sobre do livro de título {book_title} não necessariamente indica que voce fez algo errado, este é o funcionamento da vida.</p>
+                <div className="max-w-7xl mx-auto px-4 xl:px-0 pb-20 flex flex-col items-center justify-center text-center mt-32">
+                    <svg
+                        className="w-20 h-20 text-[#b03a2e]/80 mb-6"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M12 6v6m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"
+                        />
+                    </svg>
+                    <h2 className="text-2xl font-serif text-[#1a1a1a] mb-1">
+                        Nenhum resultado encontrado
+                    </h2>
+                    <p className="text-[#6b705c] text-sm max-w-md">
+                        Não encontramos nenhuma informação para o livro&nbsp;
+                        <span className="text-[#b03a2e] italic">"{decodedTitle}"</span>.
+                    </p>
                 </div>
             </>
-
         );
+
+
     }
 
     const bookData = data.items[0].volumeInfo;
