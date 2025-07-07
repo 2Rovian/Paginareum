@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import { useAuthStore } from "@/app/stores/session-store";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import useLogin from "@/app/hooks/useLogin";
 
 export default function LoginComp() {
     const [isLogin, setIsLogin] = useState<boolean>(false);
@@ -30,6 +31,10 @@ export default function LoginComp() {
     const [ShowPassword, setShowPassword] = useState<boolean>(false);
 
     const router = useRouter();
+
+    // RefacLayout
+    const { handleLogin } = useLogin();
+    // RefacLayout
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -121,17 +126,17 @@ export default function LoginComp() {
 
     }
 
-    async function handleLogin(email: string, password: string) {
-        const { error: signInError } = await supabase.auth.signInWithPassword({ email, password })
-        if (signInError) {
-            console.error("Error ao logar: ", signInError?.message)
-            toast.error("Erro ao fazer login :(")
-            return
-        }
-        toast.success("Login feito com sucesso :)")
-        setAuthenticated(true); // att globalState
-        router.push('/')
-    }
+    // async function handleLogin(email: string, password: string) {
+    //     const { error: signInError } = await supabase.auth.signInWithPassword({ email, password })
+    //     if (signInError) {
+    //         console.error("Error ao logar: ", signInError?.message)
+    //         toast.error("Erro ao fazer login :(")
+    //         return
+    //     }
+    //     toast.success("Login feito com sucesso :)")
+    //     setAuthenticated(true); // att globalState
+    //     router.push('/')
+    // }
 
     if (isAuthenticated) return (
         <div className="col-span-full flex justify-center py-10">

@@ -1,20 +1,9 @@
-'use client'
 import NavbarComp from "@/app/components/layout/(Navbar)/Navbar";
-import { supabase } from "@/app/utils/supabase/client";
-import toast from "react-hot-toast";
 import ProfileComp from "./ProfileComp";
-import { FiLogOut } from "react-icons/fi";
+import ProfileLogoutBtn from "./ProfileLogoutBtn";
 
 export default function ProfilePage() {
-    async function handleSignOut() {
-        const { error } = await supabase.auth.signOut();
-        if (error) {
-            toast.error("Erro ao desconectar");
-            return;
-        }
-        toast.success("Desconectado com sucesso");
-    }
-     
+    
     return (
         <>
             <NavbarComp />
@@ -30,13 +19,7 @@ export default function ProfilePage() {
                     <ProfileComp />
                     
                     <div className="mt-8 pt-6 border-t border-[#b03a2e]/20">
-                        <button 
-                            onClick={handleSignOut}
-                            className="flex items-center gap-2 px-5 py-2.5 text-[#b03a2e] hover:bg-[#b03a2e]/10 rounded-lg transition-colors duration-200 cursor-pointer"
-                        >
-                            <FiLogOut />
-                            Sair da conta
-                        </button>
+                        <ProfileLogoutBtn />
                     </div>
                 </div>
             </div>
