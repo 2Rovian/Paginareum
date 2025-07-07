@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import NavbarComp from "@/app/components/layout/(Navbar)/Navbar";
 import BookImage from "./BookImage";
-import LerAgoraBtn from "@/app/(pages)/bibliotheca/LerAgoraBtn";
+import LerAgoraBtn from "@/app/(pages)/bibliotheca/BibliothecaReadBtn";
 
 // Cores da paleta
 // const colors = {

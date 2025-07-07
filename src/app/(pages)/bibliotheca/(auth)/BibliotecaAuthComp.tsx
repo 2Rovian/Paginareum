@@ -239,7 +239,7 @@ export default function BibliotecaAuthComp({ SearchBook = "", SearchType, read_s
                             />
 
                             <div className={`absolute flex px-2 top-2 w-full
-                                ${livro.read_status == "read" || livro.read_status == "in_progress" ? "justify-between items-center" : "justify-end "}`}>
+                                ${livro.read_status == "read" || livro.read_status == "in_progress" ? "justify-betwee8n items-center" : "justify-end "}`}>
 
                                 {livro.read_status == "read" && <div
                                     className={` ${openDropdownId ? "opacity-100" : ""} py-1 text-sm text-[#b03a2e] rounded-full bg-white cursor-pointer flex items-center gap-x-2 px-2 outline  shadow-md `}

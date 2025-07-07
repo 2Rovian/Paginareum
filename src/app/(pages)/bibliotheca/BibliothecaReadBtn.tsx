@@ -1,9 +1,8 @@
 "use client"
 import { useEffect, useState } from "react"
-import Image from "next/image"
 import { supabase } from "@/app/utils/supabase/client"
 
-export default function LerAgoraBtn({ book_title }: { book_title: string }) {
+export default function BibliothecaReadBtn({ book_title }: { book_title: string }) {
     const [url_path_state, setUrl_path_state] = useState<string | null>("");
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -51,12 +50,3 @@ export default function LerAgoraBtn({ book_title }: { book_title: string }) {
         </a>
     )
 }
-
-{/* <a
-    href={livro.urlPath}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="hover:bg-[#b03a2e] text-[#b03a2e] hover:text-[#f6f1e7] px-8 py-2 rounded-lg outline-2 outline-[#a93226] font-semibold transition-colors duration-200 "
->
-    Ler agora
-</a> */}
