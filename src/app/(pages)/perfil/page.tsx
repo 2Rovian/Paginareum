@@ -1,5 +1,5 @@
 'use client'
-import NavbarComp from "@/app/components/Navbar";
+import NavbarComp from "@/app/components/layout/(Navbar)/Navbar";
 import { supabase } from "@/app/utils/supabase/client";
 import toast from "react-hot-toast";
 import ProfileComp from "./ProfileComp";

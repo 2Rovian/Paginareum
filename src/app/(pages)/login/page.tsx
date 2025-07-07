@@ -1,4 +1,4 @@
-import NavbarComp from "@/app/components/Navbar";
+import NavbarComp from "@/app/components/layout/(Navbar)/Navbar";
 import LoginComp from "./LoginComp";
 
 export default function LoginPage() {

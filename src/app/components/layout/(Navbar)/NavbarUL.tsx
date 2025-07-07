@@ -14,9 +14,9 @@ import { FaCircleInfo } from "react-icons/fa6";
 import { RiLoginBoxLine, RiLogoutBoxLine } from "react-icons/ri";
 // -----
 
-import { supabase } from '../utils/supabase/client';
+import { supabase } from '../../../utils/supabase/client';
 
-import { useAuthStore } from '../stores/session-store';
+import { useAuthStore } from '../../../stores/session-store';
 import toast from 'react-hot-toast';
 
 export default function Navbar_UL() {

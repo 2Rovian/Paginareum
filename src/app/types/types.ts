@@ -19,3 +19,10 @@ export interface Book {
   category?: string;
   profile_id: string;
 }
+
+export interface UserProfile {
+  profile_id: string,
+  created_at: string,
+  username: string,
+  avatar_url?: string
+}

@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from "react";
-import NavbarComp from "../../components/Navbar";
+import NavbarComp from "../../components/layout/(Navbar)/Navbar";
 import { IoCloseCircleOutline } from "react-icons/io5";
 
 import { GiOpenBook, GiWhiteBook } from "react-icons/gi";

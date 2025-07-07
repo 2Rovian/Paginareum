@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import NavbarComp from "./components/Navbar";
+import NavbarComp from "./components/layout/(Navbar)/Navbar";
 import { GiScrollQuill, GiGreekTemple } from "react-icons/gi";
 import { IoLibrary } from "react-icons/io5";
 

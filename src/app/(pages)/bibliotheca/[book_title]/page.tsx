@@ -1,7 +1,7 @@
 import { BsCalendar2DateFill } from "react-icons/bs";
 import Image from 'next/image';
 import Link from 'next/link';
-import NavbarComp from "@/app/components/Navbar";
+import NavbarComp from "@/app/components/layout/(Navbar)/Navbar";
 import BookImage from "./BookImage";
 import LerAgoraBtn from "@/app/(pages)/bibliotheca/LerAgoraBtn";
 
