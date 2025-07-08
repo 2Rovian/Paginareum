@@ -3,7 +3,7 @@ Mistura o clássico com o moderno, remetendo ao saber antigo, mas com usabilidad
 
 Cores sugeridas:
 Bege claro (#f6f1e7) — cor de papiro.
-Vermelho Pompeia (#b03a2e) — símbolo de elegância e poder.
+Vermelho Pompeia (#b03a2e) — símbolo de elegância e poder. // hover:bg-[#a93226]
 Dourado nobre (#e6c46c) — detalhes de destaque.
 Cinza-escuro ou preto fosco (#1a1a1a) — para contraste e leitura.
 Verde oliva ou louro (#6b705c) — toques vegetais, lembrando coroas romanas.

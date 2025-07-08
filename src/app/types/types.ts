@@ -9,7 +9,7 @@ export interface Livro {
 
 export interface Book {
   book_id: number;
-  created_at: string;
+  created_at?: string;
   read_status: string;
   author?: string;
   title: string;
@@ -17,7 +17,21 @@ export interface Book {
   urlPath: string;
   cover_img: string;
   category?: string;
-  profile_id: string;
+  profile_id?: string;
+}
+
+export interface BookCardProps {
+  book_id: number;
+  created_at?: string;
+  read_status: string;
+  author?: string;
+  title: string;
+  pages?: number;
+  urlPath: string;
+  cover_img: string;
+  category?: string;
+  profile_id?: string;
+  showControls?: boolean; // Mostrar 3-dots e botões (ler agora, marcar lido etc.)
 }
 
 export interface UserProfile {
