@@ -1,10 +1,12 @@
 'use client'
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Livro } from "../../types/types";
 import toast from "react-hot-toast";
 import { FiImage, FiFileText } from "react-icons/fi";
 
 import { supabase } from "@/app/utils/supabase/client";
+import CategoryInput from "./CategoryInput";
+import AuthorInput from "./AuthorInput";
 
 export default function AdicionarLivroAuth() {
   const [title, setTitle] = useState("");
@@ -17,6 +19,8 @@ export default function AdicionarLivroAuth() {
   const [pdf_File, setPdfFile] = useState<File | null>(null);
   const [imgURL, setImgURL] = useState<File | null>(null);
 
+  const [profile_id, setprofile_id] = useState<string>('');
+
   const slugify = (text: string) =>
     text
       .toLowerCase()
@@ -26,13 +30,24 @@ export default function AdicionarLivroAuth() {
       .trim()
       .replace(/\s+/g, "-");
 
+  useEffect(() => {
+    const fetch_profile_id = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return toast.error("Usuário não autenticado")
+      setprofile_id(user.id)
+    }
+
+    fetch_profile_id();
+  }, []);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true)
 
     // pega dados do user
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return toast.error("Usuário não autenticado")
+    // const { data: { user } } = await supabase.auth.getUser();
+    // if (!user) return toast.error("Usuário não autenticado")
+    // setprofile_id(user.id)
     //
 
     let imageURL = "";
@@ -42,7 +57,7 @@ export default function AdicionarLivroAuth() {
     if (imgURL) {
       const fileExt = imgURL.name.split('.').pop();
       const fileName = `${Date.now()}.${fileExt}`;
-      const filePathStorage = `${user.id}/${fileName}`;
+      const filePathStorage = `${profile_id}/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
         .from('books-covers')
@@ -68,7 +83,7 @@ export default function AdicionarLivroAuth() {
       const fileBaseName = slugify(title);
       const fileExt = pdf_File.name.split('.').pop();
       const fileName = `${fileBaseName}.${fileExt}`;
-      const filePathStorage = `${user.id}/${fileName}`;
+      const filePathStorage = `${profile_id}/${fileName}`;
 
       const { error: uploadPDF_Error } = await supabase.storage
         .from("books-pdfs")
@@ -98,7 +113,7 @@ export default function AdicionarLivroAuth() {
         pages: numPag,
         urlPath: pdfURL,
         cover_img: imageURL,
-        profile_id: user.id
+        profile_id: profile_id
       })
 
     if (error) {
@@ -145,13 +160,19 @@ export default function AdicionarLivroAuth() {
         className="bg-white px-3 py-2 rounded shadow transition-all duration-150 focus:outline-2 focus:outline-[#b03a2e]"
       />
 
-      <input
-          type="text"
-          placeholder="Autor"
-          value={author_name}
-          onChange={(e) => setAuthor_name(e.target.value)}
-          className="bg-white px-3 py-2 rounded shadow transition-all duration-150 focus:outline-2 focus:outline-[#b03a2e] "
-        />
+      {/* <input
+        type="text"
+        placeholder="Autor"
+        value={author_name}
+        onChange={(e) => setAuthor_name(e.target.value)}
+        className="bg-white px-3 py-2 rounded shadow transition-all duration-150 focus:outline-2 focus:outline-[#b03a2e] "
+      /> */}
+
+      <AuthorInput 
+        profile_id={profile_id} 
+        author_name={author_name}
+        setAuthor_name={setAuthor_name}
+      />
 
       {/* Upload da Imagem */}
       <div className="flex flex-col gap-1">
@@ -188,22 +209,27 @@ export default function AdicionarLivroAuth() {
           <p className="text-sm text-[#6b705c] italic ml-1">Arquivo: {pdf_File.name}</p>
         )}
       </div>
-  
+
       <div className="flex flex-col sm:flex-row gap-x-2 gap-y-2 sm:items-center">
-        <input
+        {/* <input
           type="text"
           placeholder="Categoria"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
           className="bg-white px-3 py-2 rounded shadow transition-all duration-150 focus:outline-2 focus:outline-[#b03a2e] grow"
+        /> */}
+        <CategoryInput
+          profile_id={profile_id}
+          category={category}
+          setCategory={setCategory}
         />
-        
+
         <input
           type="number"
           placeholder="Número de páginas"
           value={numPag}
           onChange={(e) => setNumPag(e.target.value)}
-          className="bg-white px-3 py-2 rounded shadow transition-all duration-150 focus:outline-2 focus:outline-[#b03a2e]"
+          className="bg-white px-3 py-2 max-w-[180px] rounded shadow transition-all duration-150 focus:outline-2 focus:outline-[#b03a2e]"
         />
       </div>
 

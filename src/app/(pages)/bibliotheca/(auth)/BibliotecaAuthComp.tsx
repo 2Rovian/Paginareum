@@ -8,6 +8,8 @@ import { GiWhiteBook } from "react-icons/gi";
 import { Book } from "@/app/types/types";
 import useBooks from "@/app/hooks/useBooks";
 import BookCard from "@/app/components/BookCard";
+import toast from "react-hot-toast";
+import { supabase } from "@/app/utils/supabase/client";
 
 interface SearchBookProps {
     SearchBook?: string;
@@ -19,19 +21,32 @@ export default function BibliotecaAuthComp({ SearchBook = "", SearchType, read_s
     const [books, setBooks] = useState<Book[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const { fetchAllBooks, fetchByBookName, fetchByReadStatus, debounceBook } = useBooks(SearchBook)
+    const [profile_id, setprofile_id] = useState<string>('');
+
+    useEffect(() => {
+        const fetch_profile_id = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return toast.error("Usuário não autenticado")
+            setprofile_id(user.id)
+        }
+
+        fetch_profile_id();
+    }, []);
 
     // busca os livros
     useEffect(() => {
-        if (read_status_state !== null) {
-            fetchByReadStatus(setBooks, setIsLoading, read_status_state)
-        } else if (SearchBook.trim()) {
-            fetchByBookName(setBooks, setIsLoading, SearchType)
-        } else {
-            fetchAllBooks(setBooks)
-        }
-    }, [read_status_state, SearchType, debounceBook]);
+        if(!profile_id) return;
 
-    if (isLoading) return (
+        if (read_status_state !== null) {
+            fetchByReadStatus(setBooks, profile_id, setIsLoading, read_status_state)
+        } else if (SearchBook.trim()) {
+            fetchByBookName(setBooks, profile_id, setIsLoading, SearchType)
+        } else {
+            fetchAllBooks(setBooks, profile_id)
+        }
+    }, [read_status_state, SearchType, debounceBook, profile_id]);
+
+    if (isLoading && profile_id) return (
         <div className="col-span-full flex justify-center py-10">
             <div className="animate-spin rounded-full size-30 border-t-4 border-b-4 border-[#b03a2e]"></div>
         </div>

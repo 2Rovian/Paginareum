@@ -19,7 +19,7 @@ export default function BibliothecaModalAddBook({ setMostrarAddLivro, isAuthenti
             ></div>
 
             <div
-                className="relative z-50 bg-[#f6f1e7] w-[90%] max-w-xl p-6 rounded-xl shadow-2xl ring-1 ring-[#b03a2e]/30"
+                className="relative z-50 bg-[#f6f1e7] w-[90%] max-w-2xl p-6 rounded-xl shadow-2xl ring-1 ring-[#b03a2e]/30"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex justify-between items-center mb-2">

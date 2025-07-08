@@ -12,10 +12,11 @@ type read_status_state = "unread" | "in_progress" | "read";
 export default function useBooks(SearchBook: string = "") {
     const [debounceBook] = useDebounce(SearchBook, 1000)
 
-    const fetchAllBooks = async (setBooks: setBooks) => {
+    const fetchAllBooks = async (setBooks: setBooks, profile_id: string) => {
         const { data, error } = await supabase
             .from("books")
             .select("*")
+            .eq("profile_id", profile_id)
             .order("created_at", { ascending: false });
 
         if (error) {
@@ -27,11 +28,12 @@ export default function useBooks(SearchBook: string = "") {
         setBooks(data || []);
     };
 
-    const fetchByReadStatus = async (setBooks: setBooks, setIsLoading: setIsLoading, read_status_state: read_status_state) => {
+    const fetchByReadStatus = async (setBooks: setBooks, profile_id: string,setIsLoading: setIsLoading, read_status_state: read_status_state) => {
         setIsLoading(true)
         const { data: dataReadStatus } = await supabase
             .from("books")
             .select()
+            .eq("profile_id", profile_id)
             .eq("read_status", read_status_state)
             .order("created_at", { ascending: false })
 
@@ -39,9 +41,9 @@ export default function useBooks(SearchBook: string = "") {
         setBooks(dataReadStatus || [])
     }
 
-    const fetchByBookName = async (setBooks: setBooks, setIsLoading: setIsLoading, SearchType: SearchType = 'title') => {
+    const fetchByBookName = async (setBooks: setBooks, profile_id: string ,setIsLoading: setIsLoading, SearchType: SearchType = 'title') => {
         if (!debounceBook.trim()) {
-            fetchAllBooks(setBooks);
+            fetchAllBooks(setBooks, profile_id);
             return
         }
         setIsLoading(true)
@@ -49,6 +51,7 @@ export default function useBooks(SearchBook: string = "") {
         const { data } = await supabase
             .from("books")
             .select()
+            .eq("profile_id", profile_id)
             .textSearch(SearchType, debounceBook.trim())
             .order("created_at", { ascending: false })
 

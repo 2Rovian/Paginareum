@@ -176,7 +176,7 @@ export default function BookCard({
                 />
             )}
 
-            <div className="flex flex-col flex-1 p-3">
+            <div className="flex flex-col p-3">
                 <h3
                     className="text-lg font-semibold text-[#1a1a1a] mb-1 truncate"
                     title={title}
@@ -184,12 +184,10 @@ export default function BookCard({
                     {title}
                 </h3>
 
-                <Link href={`/bibliotheca/autor/${author}`}>
-                    <p className="text-sm text-[#3e3e3e] font-medium mb-0">
-                        por {author || "Autor desconhecido"}
-                    </p>
-                </Link>
-
+                <p className="text-sm text-[#3e3e3e] font-medium mb-0">
+                    por {author || "Autor desconhecido"}
+                </p>
+                
                 <p className="text-sm text-[#6b705c] mb-0">
                     {category || 'Sem categoria'}
                 </p>
