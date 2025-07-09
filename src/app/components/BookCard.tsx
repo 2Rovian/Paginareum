@@ -18,11 +18,11 @@ export default function BookCard({
     book_id, title,
     author, pages,
     category, urlPath,
-    cover_img, read_status, showControls = false
+    cover_img, refetchBooks, read_status, showControls = false
 }: BookCardProps) {
 
     const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
-    const { handleMarkAsRead, handleMarkAsReading, handleMarkAsUnread } = useBookReadStatus(setOpenDropdownId);
+    const { handleMarkAsRead, handleMarkAsReading, handleMarkAsUnread } = useBookReadStatus(setOpenDropdownId, refetchBooks);
     const [expandedImg, setExpandedImg] = useState<string | null>(null);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const [showDeleteBook, setShowDeleteBook] = useState<boolean>(false);

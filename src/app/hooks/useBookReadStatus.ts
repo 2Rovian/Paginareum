@@ -3,7 +3,7 @@ import { supabase } from "../utils/supabase/client";
 
 type setOpenDropdownId = (val: null | number) => void
 
-export default function useBookReadStatus( setOpenDropdownId : setOpenDropdownId ) {
+export default function useBookReadStatus( setOpenDropdownId : setOpenDropdownId, refetchBooks?: () => void ) {
     const handleMarkAsRead = async (id: number) => {
         const { error } = await supabase
             .from("books")
@@ -18,6 +18,7 @@ export default function useBookReadStatus( setOpenDropdownId : setOpenDropdownId
 
         toast.success("Livro marcado como lido");
         setOpenDropdownId(null);
+        refetchBooks?.();
 
     }
 
@@ -35,6 +36,7 @@ export default function useBookReadStatus( setOpenDropdownId : setOpenDropdownId
 
         toast.success("Livro marcado como em progresso");
         setOpenDropdownId(null);
+        refetchBooks?.();
 
     }
 
@@ -52,6 +54,8 @@ export default function useBookReadStatus( setOpenDropdownId : setOpenDropdownId
 
         toast.success("Livro marcado como não lido");
         setOpenDropdownId(null);
+        refetchBooks?.();
+
     }
 
     return { handleMarkAsRead, handleMarkAsReading, handleMarkAsUnread }

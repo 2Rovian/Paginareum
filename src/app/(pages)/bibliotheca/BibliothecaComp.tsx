@@ -28,7 +28,7 @@ export default function BibliothecaComp() {
 
     return (
         <div className="max-w-7xl mx-auto xl:px-0 px-4">
-            <main className="bg-[#f6f1e7] mt-10 pb-4 ">
+            <main className="bg-[#f6f1e7] mt-5 pb-4 ">
                 <div className="text-center justify-center mb-4 flex flex-col gap-y-2">
                     <div className="flex  gap-y-1 flex-row items-center justify-between w-full">
                         <h1 className="text-4xl font-serif text-[#1a1a1a] ">

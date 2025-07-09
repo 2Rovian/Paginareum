@@ -32,6 +32,8 @@ export interface BookCardProps {
   category?: string;
   profile_id?: string;
   showControls?: boolean; // Mostrar 3-dots e botões (ler agora, marcar lido etc.)
+  refetchBooks?: () => void
+
 }
 
 export interface UserProfile {

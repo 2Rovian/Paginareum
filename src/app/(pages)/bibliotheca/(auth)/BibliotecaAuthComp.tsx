@@ -23,6 +23,16 @@ export default function BibliotecaAuthComp({ SearchBook = "", SearchType, read_s
     const { fetchAllBooks, fetchByBookName, fetchByReadStatus, debounceBook } = useBooks(SearchBook)
     const [profile_id, setprofile_id] = useState<string>('');
 
+    const refetchBooks = () => {
+        if (read_status_state !== null) {
+            fetchByReadStatus(setBooks, profile_id, setIsLoading, read_status_state);
+        } else if (SearchBook.trim()) {
+            fetchByBookName(setBooks, profile_id, setIsLoading, SearchType);
+        } else {
+            fetchAllBooks(setBooks, profile_id);
+        }
+    };
+
     useEffect(() => {
         const fetch_profile_id = async () => {
             const { data: { user } } = await supabase.auth.getUser();
@@ -35,15 +45,16 @@ export default function BibliotecaAuthComp({ SearchBook = "", SearchType, read_s
 
     // busca os livros
     useEffect(() => {
-        if(!profile_id) return;
-
-        if (read_status_state !== null) {
-            fetchByReadStatus(setBooks, profile_id, setIsLoading, read_status_state)
-        } else if (SearchBook.trim()) {
-            fetchByBookName(setBooks, profile_id, setIsLoading, SearchType)
-        } else {
-            fetchAllBooks(setBooks, profile_id)
-        }
+        if (!profile_id) return;
+        
+        refetchBooks()
+        // if (read_status_state !== null) {
+        //     fetchByReadStatus(setBooks, profile_id, setIsLoading, read_status_state)
+        // } else if (SearchBook.trim()) {
+        //     fetchByBookName(setBooks, profile_id, setIsLoading, SearchType)
+        // } else {
+        //     fetchAllBooks(setBooks, profile_id)
+        // }
     }, [read_status_state, SearchType, debounceBook, profile_id]);
 
     if (isLoading && profile_id) return (
@@ -99,6 +110,7 @@ export default function BibliotecaAuthComp({ SearchBook = "", SearchType, read_s
                         cover_img={livro.cover_img}
                         category={livro.category}
                         showControls={true}
+                        refetchBooks={refetchBooks}
                     />
                 ))}
             </section>
