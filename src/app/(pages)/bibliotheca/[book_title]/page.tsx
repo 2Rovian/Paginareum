@@ -66,7 +66,7 @@ export default async function BookDetails({
         <>
             <NavbarComp />
             <div className="max-w-7xl mx-auto px-4 xl:px-0 pb-12" >
-                <main className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start mt-10">
+                <main className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start mt-5">
                     <div className="w-full h-fit flex items-center md:items-start flex-col gap-4">
                         <div className='rounded-xl overflow-hidden shadow-md w-full h-fit '>
                             <BookImage book_title={decodedTitle} />

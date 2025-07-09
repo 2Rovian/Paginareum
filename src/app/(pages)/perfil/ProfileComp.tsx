@@ -3,15 +3,25 @@
 // icons
 import { FiMail, FiCamera } from "react-icons/fi";
 import { FaUserCircle } from "react-icons/fa";
+// -----
+
 import useUseProfile from "@/app/hooks/useUserProfile";
 import ProfileStats from "./ProfileStats";
 import ProfileAvatarInput from "./ProfileAvatarInput";
-// -----
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function ProfileComp() {
     const { UserData, loading, session } = useUseProfile();
+    const router = useRouter();
 
-    if (loading) {
+    useEffect(() => {
+        if (!loading && !session) {
+            router.push('/login'); 
+        }
+    }, [loading, session, router]);
+
+    if (loading || !session) {
         return (
             <div className="flex justify-center items-center py-8 h-[300px]">
                 <div className="animate-spin rounded-full size-24 border-t-3 border-b-3 border-[#b03a2e]"></div>
