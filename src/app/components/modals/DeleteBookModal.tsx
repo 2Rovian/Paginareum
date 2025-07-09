@@ -5,10 +5,11 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface DeleteBookModal{
     setShowDeleteBook: (val: boolean) => void,
-    book_id: number
+    book_id: number,
+    refetchBooks?: () => void
 }
 
-export default function DeleteBookModal({ setShowDeleteBook, book_id } : DeleteBookModal ) {
+export default function DeleteBookModal({ setShowDeleteBook, book_id, refetchBooks } : DeleteBookModal ) {
 
     const { handleDeleteBook } = useBooks()
 
@@ -51,7 +52,7 @@ export default function DeleteBookModal({ setShowDeleteBook, book_id } : DeleteB
                     </button>
 
                     <button
-                        onClick={() => handleDeleteBook(book_id, setShowDeleteBook)}
+                        onClick={() => handleDeleteBook(book_id, setShowDeleteBook, refetchBooks)}
                         className="px-5 py-2 rounded-md bg-[#b03a2e] cursor-pointer text-white hover:bg-[#a93226] transition"
                     >
                         Remover livro

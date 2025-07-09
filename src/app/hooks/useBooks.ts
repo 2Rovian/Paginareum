@@ -59,7 +59,7 @@ export default function useBooks(SearchBook: string = "") {
         setBooks(data || []);
     }
 
-    const handleDeleteBook = async (book_id: number, setShowDeleteBook: setShowDeleteBook) => {
+    const handleDeleteBook = async (book_id: number, setShowDeleteBook: setShowDeleteBook, refetchBooks?: () => void) => {
         const { error } = await supabase
             .from("books")
             .delete()
@@ -73,7 +73,7 @@ export default function useBooks(SearchBook: string = "") {
 
         toast.success("Livro removido");
         setShowDeleteBook(false);
-
+        refetchBooks?.()
     }
 
     return { fetchAllBooks, fetchByBookName, fetchByReadStatus, handleDeleteBook, debounceBook }

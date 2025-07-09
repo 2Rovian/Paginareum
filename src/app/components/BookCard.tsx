@@ -164,6 +164,7 @@ export default function BookCard({
                 <DeleteBookModal
                     setShowDeleteBook={setShowDeleteBook}
                     book_id={book_id}
+                    refetchBooks={refetchBooks}
                 />
             )}
 
