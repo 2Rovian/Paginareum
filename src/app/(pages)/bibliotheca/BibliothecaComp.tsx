@@ -6,10 +6,10 @@ import { useAuthStore } from "@/app/stores/session-store";
 
 // components //
 import BibliotecaAuthComp from "./(auth)/BibliotecaAuthComp";
-import BibliotecaGuestComp from "./(guest)/BibliotecaGuestComp";
 import BibliothecaSearchBar from "./BibliothecaSearchBar";
 import BibliothecaFilterTabs from "./BibliothecaFilterTabs";
 import BibliothecaModalAddBook from "./BibliothecaModalAddBook";
+import BibliothecaGuestComp from "./BibliothecaGuestComp";
 // components //
 
 export default function BibliothecaComp() {
@@ -84,9 +84,7 @@ export default function BibliothecaComp() {
                         SearchType={searchType}
                         read_status_state={read_status_state}
                     />
-                ) : (
-                    <BibliotecaGuestComp />
-                )}
+                ): <BibliothecaGuestComp/>}
 
             </main>
         </div>

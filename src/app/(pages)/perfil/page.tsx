@@ -18,9 +18,9 @@ export default function ProfilePage() {
                     
                     <ProfileComp />
                     
-                    <div className="mt-8 pt-6 border-t border-[#b03a2e]/20">
+                    {/* <div className="mt-8 pt-6 border-t border-[#b03a2e]/20">
                         <ProfileLogoutBtn />
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </>

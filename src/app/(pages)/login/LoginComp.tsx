@@ -12,6 +12,8 @@ export default function LoginComp() {
     const [isLogin, setIsLogin] = useState<boolean>(false);
     const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
 
+    const [isLoadingPage, setisLoadingPage] = useState<boolean>(true);
+
     const { isAuthenticated } = useAuthStore();
 
     // form inputs
@@ -34,7 +36,10 @@ export default function LoginComp() {
     useEffect(() => {
         if (isAuthenticated) {
             router.push('/')
+            setisLoadingPage(false)
         }
+
+        setisLoadingPage(false)
     }, [isAuthenticated])
 
     const handleSubmitForm = async (e: FormEvent) => {
@@ -57,9 +62,9 @@ export default function LoginComp() {
         setEmail('')
     }
 
-    if (isAuthenticated) return (
-        <div className="col-span-full flex justify-center py-10">
-            <div className="animate-spin rounded-full size-44 border-t-4 border-b-4 border-[#b03a2e]"></div>
+    if (isAuthenticated || isLoadingPage) return (
+        <div className="col-span-full flex justify-center py-10 mt-20">
+            <div className="animate-spin rounded-full size-28 border-t-4 border-b-4 border-[#b03a2e]"></div>
         </div>
 
     )

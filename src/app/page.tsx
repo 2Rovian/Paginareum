@@ -16,12 +16,9 @@ export default function Home() {
 
 
           </p>
-          <div className="flex gap-4">
-            <button className="bg-[#b03a2e] text-[#f6f1e7] hover:text-[#e6c46c] px-4 py-2 rounded-lg cursor-pointer transition-hover">
-              Adicionar Livro
-            </button>
+          <div className="">
             <Link href={'/bibliotheca'} className='rounded-lg'>
-              <button className="border border-[#6b705c] hover:border-[#b03a2e] text-[#6b705c] px-4 py-2 rounded-lg hover:text-[#b03a2e]  cursor-pointer transition-hover">
+              <button className="border border-[#6b705c] hover:border-[#b03a2e] text-[#6b705c] px-8 py-2 rounded-lg hover:text-[#b03a2e]  cursor-pointer transition-hover">
                 Ver Bibliotheca
               </button>
             </Link>
@@ -36,12 +33,6 @@ export default function Home() {
               <span className="font-bold mb-1 text-lg text-[#b03a2e]">Catálogo Pessoal</span>
               <p className="text-sm text-[#6b705c]">Adicione e organize seus livros em um só lugar com facilidade e clareza.</p>
             </li>
-
-            {/* <li className="px-3 py-4 md:py-5 flex flex-col justify-center border border-[#b03a2e] rounded-lg text-center">
-              <GiLaurels className="mx-auto text-6xl mb-2 text-[#e6c46c]" />
-              <span className="font-bold mb-1 text-lg text-[#b03a2e]">Busca Inteligente</span>
-              <p className="text-sm text-[#6b705c]">Encontre livros por título, autor ou categoria em segundos.</p>
-            </li> */}
 
             <li className="px-3 py-4 md:py-5 flex flex-col justify-center border border-[#b03a2e] rounded-lg text-center">
               <GiScrollQuill className="mx-auto text-6xl mb-2 text-[#e6c46c]" />
@@ -59,70 +50,38 @@ export default function Home() {
 
         </section>
 
-        <section className="mt-6 px-4 max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl font-serif text-[#1a1a1a] mb-3">Autenticado ou não: como você prefere usar?</h2>
+        <section className="mt-6 px-4 flex flex-col justify-center items-center max-w-4xl mx-auto">
+          <h2 className="text-2xl font-serif text-[#1a1a1a] mb-3">Comece sua jornada literária</h2>
           <p className="text-[#6b705c] mb-3 text-sm">
-            O Paginareum funciona tanto para visitantes quanto para usuários cadastrados.
+            Para salvar e gerenciar seus livros, é necessário ter uma conta. A boa notícia? É rápido, gratuito e sem complicações.
           </p>
+
           <div className="mb-6">
             <Link href="/login">
               <button className="bg-[#b03a2e] text-[#f6f1e7] hover:text-[#e6c46c] px-5 py-2 rounded-lg cursor-pointer transition-hover">
-                Crie sua conta gratuitamente
+                Criar conta ou fazer login
               </button>
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-            <div className="border border-[#b03a2e] rounded-lg p-5">
-              <h3 className="text-lg font-bold text-[#b03a2e] mb-2">Visitante (Guest)</h3>
-              <ul className="text-sm text-[#6b705c] space-y-1">
-                <li className='flex items-start gap-x-2'>
-                  <span className="text-[#b03a2e]">→</span>
-                  <span>Adicione e exclua livros</span>
-
-                </li>
-                <li className='flex items-start gap-x-2'>
-                  <span className="text-[#b03a2e]">→</span>
-                  <span>Armazenamento no navegador via localStorage</span>
-                </li>
-                <li className='flex items-start gap-x-2'>
-                  <span className="text-[#b03a2e]">→</span>
-                  <span>Perde os dados se mudar de navegador ou dispositivo</span>
-                </li>
-              </ul>
-            </div>
-
-            <div className="border border-[#b03a2e] rounded-lg p-5 ">
-              <h3 className="text-lg font-bold text-[#b03a2e] mb-2">Usuário Autenticado</h3>
-              <ul className="text-sm text-[#6b705c] space-y-1">
-                <li className='flex items-start gap-x-2'>
-                  <span className="text-[#b03a2e]">→</span>
-                  <span>Adicione e exclua livros</span>
-
-                </li>
-                <li className='flex items-start gap-x-2'>
-                  <span className="text-[#b03a2e]">→</span>
-                  <span>Acesse seus livros de qualquer lugar</span>
-
-                </li>
-                <li className='flex items-start gap-x-2'>
-                  <span className="text-[#b03a2e]">→</span>
-                  <span>Marque seu progresso literário</span>
-
-                </li>
-              </ul>
-            </div>
+          <div className="border border-[#b03a2e] rounded-lg p-5 w-fit mx-auto">
+            <h3 className="text-lg text-center font-bold text-[#b03a2e] mb-2">Recursos disponíveis para usuários autenticados</h3>
+            <ul className="text-sm text-[#6b705c] space-y-1">
+              <li className='flex items-start gap-x-2'>
+                <span className="text-[#b03a2e]">→</span>
+                <span>Adicione e exclua livros da sua biblioteca pessoal</span>
+              </li>
+              <li className='flex items-start gap-x-2'>
+                <span className="text-[#b03a2e]">→</span>
+                <span>Acesse seus livros de qualquer dispositivo</span>
+              </li>
+              <li className='flex items-start gap-x-2'>
+                <span className="text-[#b03a2e]">→</span>
+                <span>Marque seu progresso de leitura (não lido, em progresso, lido)</span>
+              </li>
+            </ul>
           </div>
-
-          {/* <div className="mt-6">
-            <Link href="/login">
-              <button className="bg-[#b03a2e] text-[#f6f1e7] hover:text-[#e6c46c] font-semibold px-5 py-2 rounded-lg cursor-pointer transition-hover">
-                Crie sua conta gratuitamente
-              </button>
-            </Link>
-          </div> */}
         </section>
-
 
       </div>
       <footer className="text-center py-6 text-sm text-[#6b705c] border-t border-[#b03a2e]/20 mt-10">
@@ -134,11 +93,3 @@ export default function Home() {
     </>
   );
 }
-
-// Mistura o clássico com o moderno, remetendo ao saber antigo, mas com usabilidade atual.
-// Cores sugeridas:
-// Bege claro (#f6f1e7) — cor de papiro.
-// Vermelho Pompeia (#b03a2e) — símbolo de elegância e poder.
-// Dourado queimado (#c79c60) — detalhes de destaque.
-// Cinza-escuro ou preto fosco (#1a1a1a) — para contraste e leitura.
-// Verde oliva ou louro (#6b705c) — toques vegetais, lembrando coroas romanas.
