@@ -78,7 +78,7 @@ export default function LoginComp() {
                         {isLogin ? "Bem-vindo" : "Crie sua conta"}
                     </h2>
                     <p className="text-[#6b705c]">
-                        {isLogin ? "Entre com seu username ou email e senha." : "Cadastre-se gratuitamente."}
+                        {isLogin ? "Entre com seu email e senha." : "Cadastre-se gratuitamente."}
                     </p>
                 </div>
 
@@ -89,7 +89,7 @@ export default function LoginComp() {
                         type="text"
                         value={email}
                         onChange={(e => setEmail(e.target.value))}
-                        placeholder="Username ou email"
+                        placeholder="Email"
                         className="focus:outline-2 outline-[#b03a2e] px-3 py-2 rounded bg-white ease-in-out duration-100 shadow"
                     />
 
@@ -152,13 +152,13 @@ export default function LoginComp() {
 
                 </form>
 
-                {isLogin && <div className="mt-5"><ProvidersComp /></div>}
+                <div className="mt-5"><ProvidersComp /></div>
 
-                {isLogin &&
+                
                     <p className="text-center text-[#6b705c] mt-5 text-sm">
                         Ao continuar, você concorda com nossos Termos de Uso e Política de Privacidade.
                     </p>
-                }
+                
             </div>
 
             <p className="text-[#1a1a1a] mt-5 text-center">

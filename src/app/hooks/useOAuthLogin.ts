@@ -1,0 +1,23 @@
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "../stores/session-store";
+import { supabase } from "../utils/supabase/client";
+import toast from "react-hot-toast";
+
+export default function useOAuthLogin() {
+
+    const handleLoginWithProvider = async (provider: "github" | "discord") => {
+        const { error: ErrorOnProviderLogin } = await supabase.auth.signInWithOAuth({
+            provider: provider,
+            options: {
+                redirectTo: `${location.origin}/auth/callback` 
+            }
+        })
+
+        if (ErrorOnProviderLogin) {
+            console.error(`Erro ao logar com ${provider} `, ErrorOnProviderLogin.message)
+            toast.error(`Erro ao logar com ${provider}`)
+            return
+        }
+    }
+    return { handleLoginWithProvider }
+}

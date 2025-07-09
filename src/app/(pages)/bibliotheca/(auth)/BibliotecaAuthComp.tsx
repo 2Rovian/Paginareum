@@ -46,7 +46,7 @@ export default function BibliotecaAuthComp({ SearchBook = "", SearchType, read_s
     // busca os livros
     useEffect(() => {
         if (!profile_id) return;
-        
+
         refetchBooks()
         // if (read_status_state !== null) {
         //     fetchByReadStatus(setBooks, profile_id, setIsLoading, read_status_state)
@@ -91,6 +91,15 @@ export default function BibliotecaAuthComp({ SearchBook = "", SearchType, read_s
                 {read_status_state === "read"
                     ? "Que tal adicionar suas próximas conquistas literárias?"
                     : "O primeiro passo começa com um livro aberto"}
+            </p>
+        </div>
+    )
+
+    if (!isLoading && books.length == 0) return (
+        <div className="text-center py-10 overflow-hidden">
+            <p className="text-2xl text-[#b03a2e] font-serif italic">Parece que você não adicionou nenhum livro</p>
+            <p className="text-[#5a4a3a] mt-2">
+                Que tal adicionar suas próximas conquistas literárias?
             </p>
         </div>
     )
