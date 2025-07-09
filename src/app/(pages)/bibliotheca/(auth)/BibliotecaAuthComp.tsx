@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 // icons
 import { GiWhiteBook } from "react-icons/gi";
@@ -69,7 +69,7 @@ export default function BibliotecaAuthComp({ SearchBook = "", SearchType, read_s
             <div className="max-w-md mx-auto">
                 <GiWhiteBook className="text-5xl text-[#b03a2e] mx-auto mb-4" />
                 <h3 className="text-xl font-serif text-[#1a1a1a] mb-2">
-                    "O mistério de <span className="text-[#b03a2e]">{debounceBook}</span>"
+                    &quot;O mistério de <span className="text-[#b03a2e]">{debounceBook}</span>&quot;
                 </h3>
                 <p className="text-[#5a4a3a]">
                     Parece que este livro ainda não está em sua biblioteca.

@@ -1,5 +1,3 @@
-import { useRouter } from "next/navigation";
-import { useAuthStore } from "../stores/session-store";
 import { supabase } from "../utils/supabase/client";
 import toast from "react-hot-toast";
 

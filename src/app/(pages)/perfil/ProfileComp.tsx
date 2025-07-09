@@ -4,6 +4,7 @@
 import { FiMail, FiCamera } from "react-icons/fi";
 import { FaUserCircle } from "react-icons/fa";
 // -----
+import Image from 'next/image'
 
 import useUseProfile from "@/app/hooks/useUserProfile";
 import ProfileStats from "./ProfileStats";
@@ -38,7 +39,9 @@ export default function ProfileComp() {
                     <div className="flex flex-col items-center mb-6">
                         <div className="relative group">
                             {UserData?.avatar_url ? (
-                                <img
+                                <Image
+                                    width={300}
+                                    height={300}
                                     src={UserData?.avatar_url}
                                     alt="Foto do perfil"
                                     className="size-32 rounded-full object-cover border-3 border-[#b03a2e]/80 shadow-md"

@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent } from "react";
 import toast from "react-hot-toast";
 import { supabase } from "../utils/supabase/client";
 import useLogin from "./useLogin";

@@ -1,5 +1,6 @@
 'use client'
 import { IoCloseCircleOutline } from "react-icons/io5";
+import Image from "next/image";
 
 interface ExpandImgModal{
     setExpandedImg: (val: string | null) => void,
@@ -23,7 +24,10 @@ export default function ExpandImgModal({setExpandedImg, expandedImg, title} : Ex
             <div className="relative max-w-4xl w-[90%] max-h-[90vh] overflow-auto"
                 onClick={(e) => e.stopPropagation()}
             >
-                <img
+                <Image
+                    width={300}
+                    height={300}
+                    loading='lazy'
                     src={expandedImg}
                     alt={`Imagem do livro "${title}" `}
                     className="w-full h-auto object-contain rounded-xl shadow-2xl border"

@@ -1,18 +1,8 @@
 import { BsCalendar2DateFill } from "react-icons/bs";
-import Image from 'next/image';
 import Link from 'next/link';
 import NavbarComp from "@/app/components/layout/(Navbar)/Navbar";
 import BookImage from "./BookImage";
 import LerAgoraBtn from "@/app/(pages)/bibliotheca/BibliothecaReadBtn";
-
-// Cores da paleta
-// const colors = {
-// papiro: '#f6f1e7',
-// pompeiaRed: '#b03a2e',
-// nobleGold: '#e6c46c',
-// darkGray: '#1a1a1a',
-// oliveGreen: '#6b705c'
-// };
 
 export default async function BookDetails({
     params,
@@ -51,7 +41,7 @@ export default async function BookDetails({
                     </h2>
                     <p className="text-[#6b705c] text-sm max-w-md">
                         Não encontramos nenhuma informação para o livro&nbsp;
-                        <span className="text-[#b03a2e] italic">"{decodedTitle}"</span>.
+                        <span className="text-[#b03a2e] italic"> &quot;{decodedTitle} &quot;</span>.
                     </p>
                 </div>
             </>

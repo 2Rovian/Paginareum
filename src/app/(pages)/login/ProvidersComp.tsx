@@ -1,6 +1,6 @@
 'use client'
 import useOAuthLogin from "@/app/hooks/useOAuthLogin";
-import { FaGithub, FaGoogle, FaDiscord } from "react-icons/fa";
+import { FaGithub, FaDiscord } from "react-icons/fa";
 
 export default function ProvidersComponent() {
 

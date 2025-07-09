@@ -74,7 +74,10 @@ export default function BookImage({ book_title }: { book_title: string }) {
 
 
     return (
-        <img
+        <Image
+            width={300}
+            height={300}
+            loading="lazy"
             alt={`Capa do livro ${book_title}`}
             src={bookImg!}
             className="rounded-xl object-cover"

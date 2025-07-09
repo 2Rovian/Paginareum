@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image'
 
 // icons
 import { GiZeusSword } from "react-icons/gi";
@@ -62,7 +63,9 @@ export default function Navbar_UL() {
             label: "Perfil",
             href: "/perfil",
             icon: avatar_url ? (
-                <img
+                <Image
+                    width={300}
+                    height={300}
                     src={avatar_url}
                     alt="Avatar"
                     className="size-6 rounded-full object-cover"

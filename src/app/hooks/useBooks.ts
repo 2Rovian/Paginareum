@@ -1,9 +1,9 @@
-import { useEffect } from "react";
 import { supabase } from "../utils/supabase/client";
 import toast from "react-hot-toast";
 import { useDebounce } from "use-debounce";
+import { Book } from "../types/types";
 
-type setBooks = (val: any) => void;
+type setBooks = (val: Book[]) => void;
 type setIsLoading = (val: boolean) => void;
 type setShowDeleteBook = (val: boolean) => void;
 type SearchType = "title" | "category" | "author";

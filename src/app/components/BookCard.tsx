@@ -12,6 +12,7 @@ import { MdAutoStories } from "react-icons/md";
 import Link from "next/link";
 import DeleteBookModal from "./modals/DeleteBookModal";
 import ExpandImgModal from "./modals/ExpandImgModal";
+import Image from "next/image";
 // -----
 
 export default function BookCard({
@@ -53,7 +54,9 @@ export default function BookCard({
         >
 
             <div className="relative">
-                <img
+                <Image
+                    width={300}
+                    height={300}
                     src={cover_img || '/default-cover-smaller.png'}
                     alt={`Capa do livro ${title}`}
                     className="h-72 w-full object-cover"

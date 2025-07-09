@@ -1,6 +1,5 @@
 import NavbarComp from "@/app/components/layout/(Navbar)/Navbar";
 import ProfileComp from "./ProfileComp";
-import ProfileLogoutBtn from "./ProfileLogoutBtn";
 
 export default function ProfilePage() {
     
@@ -18,9 +17,6 @@ export default function ProfilePage() {
                     
                     <ProfileComp />
                     
-                    {/* <div className="mt-8 pt-6 border-t border-[#b03a2e]/20">
-                        <ProfileLogoutBtn />
-                    </div> */}
                 </div>
             </div>
         </>
