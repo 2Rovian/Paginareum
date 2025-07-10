@@ -9,7 +9,7 @@ export default async function BookDetails({
 }: {
     params: { book_title: string };
 }) {
-    const { book_title } = await params;
+    const { book_title } = params;
     const decodedTitle = decodeURIComponent(book_title);
 
     const response = await fetch(
