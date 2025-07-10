@@ -58,12 +58,16 @@ export default function AdicionarLivroAuth() {
     // se houver imagem, faz upload
     if (imgURL) {
       const fileExt = imgURL.name.split('.').pop();
-      const fileName = `${Date.now()}.${fileExt}`;
+      const slugifiedTitle = slugify(title);
+      const fileName = `${slugifiedTitle}-img.${fileExt}`;
       const filePathStorage = `${profile_id}/${fileName}`;
 
+      // Caso já exista, sobrescreve
       const { error: uploadError } = await supabase.storage
         .from('books-covers')
-        .upload(filePathStorage, imgURL);
+        .upload(filePathStorage, imgURL, {
+          upsert: true, // sobrescreve se já existir
+        });
 
       if (uploadError) {
         toast.error("Erro ao enviar imagem");
@@ -72,7 +76,6 @@ export default function AdicionarLivroAuth() {
         return;
       }
 
-      // Gera a URL da imagem
       const { data: urlData } = supabase
         .storage
         .from('books-covers')
@@ -170,8 +173,8 @@ export default function AdicionarLivroAuth() {
         className="bg-white px-3 py-2 rounded shadow transition-all duration-150 focus:outline-2 focus:outline-[#b03a2e] "
       /> */}
 
-      <AuthorInput 
-        profile_id={profile_id} 
+      <AuthorInput
+        profile_id={profile_id}
         author_name={author_name}
         setAuthor_name={setAuthor_name}
       />
