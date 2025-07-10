@@ -7,7 +7,7 @@ export default function useOAuthLogin() {
         const { error: ErrorOnProviderLogin } = await supabase.auth.signInWithOAuth({
             provider: provider,
             options: {
-                redirectTo: `${location.origin}/auth/callback` 
+                redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback` 
             }
         })
 
