@@ -19,7 +19,7 @@ interface SearchBookProps {
 
 export default function BibliotecaAuthComp({ SearchBook = "", SearchType, read_status_state = null }: SearchBookProps) {
     const [books, setBooks] = useState<Book[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const { fetchAllBooks, fetchByBookName, fetchByReadStatus, debounceBook } = useBooks(SearchBook)
     const [profile_id, setprofile_id] = useState<string>('');
 
@@ -34,28 +34,31 @@ export default function BibliotecaAuthComp({ SearchBook = "", SearchType, read_s
     };
 
     useEffect(() => {
-        const fetch_profile_id = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) return toast.error("Usuário não autenticado")
-            setprofile_id(user.id)
-        }
+        const fetchBooksWithProfile = async () => {
+            const { data: { user }, error } = await supabase.auth.getUser();
+            if (error || !user) {
+                toast.error("Usuário não autenticado");
+                setIsLoading(false);
+                return;
+            }
 
-        fetch_profile_id();
-    }, []);
+            const user_id = user.id;
+            setprofile_id(user_id); 
 
-    // busca os livros
-    useEffect(() => {
-        if (!profile_id) return;
+            if (read_status_state !== null) {
+                await fetchByReadStatus(setBooks, user_id, setIsLoading,read_status_state);
+            } else if (SearchBook.trim()) {
+                await fetchByBookName(setBooks, user_id, setIsLoading, SearchType);
+            } else {
+                await fetchAllBooks(setBooks, user_id);
+            }
 
-        refetchBooks()
-        // if (read_status_state !== null) {
-        //     fetchByReadStatus(setBooks, profile_id, setIsLoading, read_status_state)
-        // } else if (SearchBook.trim()) {
-        //     fetchByBookName(setBooks, profile_id, setIsLoading, SearchType)
-        // } else {
-        //     fetchAllBooks(setBooks, profile_id)
-        // }
-    }, [read_status_state, SearchType, debounceBook, profile_id]);
+            setIsLoading(false); 
+        };
+
+        fetchBooksWithProfile();
+    }, [read_status_state, SearchType, debounceBook]);
+
 
     if (isLoading && profile_id) return (
         <div className="col-span-full flex justify-center py-10">

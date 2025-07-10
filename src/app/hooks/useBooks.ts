@@ -10,7 +10,7 @@ type SearchType = "title" | "category" | "author";
 type read_status_state = "unread" | "in_progress" | "read";
 
 export default function useBooks(SearchBook: string = "") {
-    const [debounceBook] = useDebounce(SearchBook, 1000)
+    const [debounceBook] = useDebounce(SearchBook, 400)
 
     const fetchAllBooks = async (setBooks: setBooks, profile_id: string) => {
         const { data, error } = await supabase
@@ -28,7 +28,7 @@ export default function useBooks(SearchBook: string = "") {
         setBooks(data || []);
     };
 
-    const fetchByReadStatus = async (setBooks: setBooks, profile_id: string,setIsLoading: setIsLoading, read_status_state: read_status_state) => {
+    const fetchByReadStatus = async (setBooks: setBooks, profile_id: string, setIsLoading: setIsLoading, read_status_state: read_status_state) => {
         setIsLoading(true)
         const { data: dataReadStatus } = await supabase
             .from("books")
