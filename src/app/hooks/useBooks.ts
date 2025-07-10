@@ -2,6 +2,7 @@ import { supabase } from "../utils/supabase/client";
 import toast from "react-hot-toast";
 import { useDebounce } from "use-debounce";
 import { Book } from "../types/types";
+import useSlugify from "./useSlugify";
 
 type setBooks = (val: Book[]) => void;
 type setIsLoading = (val: boolean) => void;
@@ -11,6 +12,7 @@ type read_status_state = "unread" | "in_progress" | "read";
 
 export default function useBooks(SearchBook: string = "") {
     const [debounceBook] = useDebounce(SearchBook, 400)
+    const { slugify } = useSlugify()
 
     const fetchAllBooks = async (setBooks: setBooks, profile_id: string) => {
         const { data, error } = await supabase
@@ -41,7 +43,7 @@ export default function useBooks(SearchBook: string = "") {
         setBooks(dataReadStatus || [])
     }
 
-    const fetchByBookName = async (setBooks: setBooks, profile_id: string ,setIsLoading: setIsLoading, SearchType: SearchType = 'title') => {
+    const fetchByBookName = async (setBooks: setBooks, profile_id: string, setIsLoading: setIsLoading, SearchType: SearchType = 'title') => {
         if (!debounceBook.trim()) {
             fetchAllBooks(setBooks, profile_id);
             return
@@ -60,6 +62,35 @@ export default function useBooks(SearchBook: string = "") {
     }
 
     const handleDeleteBook = async (book_id: number, setShowDeleteBook: setShowDeleteBook, refetchBooks?: () => void) => {
+
+        // pega id do usuário e nome do livro
+        const { data: bookData, error: fetchError } = await supabase
+            .from("books")
+            .select("profile_id, title")
+            .eq("book_id", book_id)
+            .single()
+
+        // Se erro, retorna
+        if (fetchError || !bookData) {
+            toast.error("Erro ao buscar livro");
+            console.error(fetchError);
+            return;
+        }
+
+        const slugifiedTitle = slugify(bookData.title);
+        const pdfPath = `${bookData.profile_id}/${slugifiedTitle}.pdf`;
+
+        // deleta no bucket
+        const { error: bucketError } = await supabase.storage
+            .from("books-pdfs")
+            .remove([pdfPath]);
+
+        if (bucketError) {
+            toast.error("Erro ao deletar PDF do storage");
+            console.error(bucketError);
+            return;
+        }
+
         const { error } = await supabase
             .from("books")
             .delete()

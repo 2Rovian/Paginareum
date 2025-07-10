@@ -6,6 +6,7 @@ import { FiImage, FiFileText } from "react-icons/fi";
 import { supabase } from "@/app/utils/supabase/client";
 import CategoryInput from "./CategoryInput";
 import AuthorInput from "./AuthorInput";
+import useSlugify from "@/app/hooks/useSlugify";
 
 export default function AdicionarLivroAuth() {
   const [title, setTitle] = useState("");
@@ -20,14 +21,16 @@ export default function AdicionarLivroAuth() {
 
   const [profile_id, setprofile_id] = useState<string>('');
 
-  const slugify = (text: string) =>
-    text
-      .toLowerCase()
-      .normalize("NFD") // remove acentos
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^\w\s-]/g, "") // remove pontuação
-      .trim()
-      .replace(/\s+/g, "-");
+  // const slugify = (text: string) =>
+  //   text
+  //     .toLowerCase()
+  //     .normalize("NFD") // remove acentos
+  //     .replace(/[\u0300-\u036f]/g, "")
+  //     .replace(/[^\w\s-]/g, "") // remove pontuação
+  //     .trim()
+  //     .replace(/\s+/g, "-");
+
+  const { slugify } = useSlugify()
 
   useEffect(() => {
     const fetch_profile_id = async () => {
