@@ -32,8 +32,7 @@ export default function BibliothecaModalAddBook({ setMostrarAddLivro, isAuthenti
                     </button>
                 </div>
 
-                {isAuthenticated ?
-                    <AdicionarLivroAuth /> : <AdicionarLivroGuest />}
+                {isAuthenticated && <AdicionarLivroAuth />}
 
             </div>
         </div>
