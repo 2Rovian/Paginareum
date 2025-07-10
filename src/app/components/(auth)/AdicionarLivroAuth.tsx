@@ -140,11 +140,24 @@ export default function AdicionarLivroAuth() {
     setLoading(false)
   }
 
+  // const handleFileImgChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   if (e.target.files && e.target.files.length > 0) {
+  //     setImgURL(e.target.files[0]);
+  //   }
+  // }
+
   const handleFileImgChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setImgURL(e.target.files[0]);
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.type !== "image/png") {
+      toast.error("Apenas arquivos PNG são permitidos");
+      e.target.value = ""; // limpa o input
+      return;
     }
-  }
+
+    setImgURL(file);
+  };
 
   const handleFilePdfChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -188,7 +201,7 @@ export default function AdicionarLivroAuth() {
         <input
           id="img-upload"
           type="file"
-          accept="image/*"
+          accept="image/png"
           onChange={handleFileImgChange}
           className="hidden"
         />

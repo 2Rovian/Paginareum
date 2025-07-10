@@ -79,16 +79,27 @@ export default function useBooks(SearchBook: string = "") {
 
         const slugifiedTitle = slugify(bookData.title);
         const pdfPath = `${bookData.profile_id}/${slugifiedTitle}.pdf`;
+        const imagePath = `${bookData.profile_id}/${slugifiedTitle}-img.png`;
 
-        // deleta no bucket
-        const { error: bucketError } = await supabase.storage
+        // deleta PDF no bucket
+        const { error: bucketErrorPDF } = await supabase.storage
             .from("books-pdfs")
             .remove([pdfPath]);
 
-        if (bucketError) {
+        if (bucketErrorPDF) {
             toast.error("Erro ao deletar PDF do storage");
-            console.error(bucketError);
+            console.error(bucketErrorPDF);
             return;
+        }
+
+        // deleta cover no bucket
+        const { error: bucketErrorIMG } = await supabase.storage
+            .from("books-covers")
+            .remove([imagePath]);
+
+        if (bucketErrorIMG) {
+            toast.error("Erro ao deletar imagem do storage");
+            console.error(bucketErrorIMG);
         }
 
         const { error } = await supabase
