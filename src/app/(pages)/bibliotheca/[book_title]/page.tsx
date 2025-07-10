@@ -7,9 +7,9 @@ import LerAgoraBtn from "@/app/(pages)/bibliotheca/BibliothecaReadBtn";
 export default async function BookDetails({
   params,   
 }: {
-  params: { book_title: string };  
+  params: Promise<{ book_title: string }>
 }) {
-    const { book_title } = params;
+    const { book_title } = await params;
     const decodedTitle = decodeURIComponent(book_title);
 
     const response = await fetch(
