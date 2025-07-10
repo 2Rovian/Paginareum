@@ -4,13 +4,11 @@ import NavbarComp from "@/app/components/layout/(Navbar)/Navbar";
 import BookImage from "./BookImage";
 import LerAgoraBtn from "@/app/(pages)/bibliotheca/BibliothecaReadBtn";
 
-type BookDetailsProps = {
-  params: {
-    book_title: string;
-  };
-};
-
-export default async function BookDetails({ params }: BookDetailsProps) {
+export default async function BookDetails({
+  params,   
+}: {
+  params: { book_title: string };  
+}) {
     const { book_title } = params;
     const decodedTitle = decodeURIComponent(book_title);
 
