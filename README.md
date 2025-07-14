@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📚 Paginareum
 
-## Getting Started
+**Paginareum** é uma plataforma de catálogo e organização de livros digitais. Usuários podem adicionar, classificar, e gerenciar suas leituras com uma interface elegante e intuitiva. O foco principal é oferecer um sistema flexível de categorização com tópicos personalizados, ideal para quem deseja construir sua própria biblioteca digital organizada.
 
-First, run the development server:
+## Demo
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Veja a versão hospedada no Vercel:  
+[https://appetize-five.vercel.app/](https://paginareum.vercel.app)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Bibliotheca
+<img width="1919" height="915" alt="Screenshot_142" src="https://github.com/user-attachments/assets/bfee74e5-d712-4a52-8871-59c36c18b2e5" />
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🧠 Visão Geral
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+O projeto oferece:
+- Adição de livros com upload de capa e PDF para o Supabase Storage.
+- Organização dos livros com tópicos criados pelo próprio usuário.
+- Controle de status de leitura: `unread`, `in_progress`, `read`.
+- Página de perfil com estatísticas de leitura.
+- Interface moderna com React, Tailwind, animações com tailwind-motion.
+- Backend com Supabase (auth, banco de dados e storage).
+- Login com providers(Github, Discord)
 
-## Learn More
+## ⚙️ Tecnologias
 
-To learn more about Next.js, take a look at the following resources:
+- **Frontend**: React, Next.js, Tailwind CSS, Zustand
+- **Backend/Storage**: Supabase (PostgreSQL, Auth, Storage)
+- **Outros**: TypeScript (evitando `any`)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Instalação
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Clone o repositório  
+   ```bash
+   git clone https://github.com/2Rovian/Paginareum.git
+2. Entre na pasta do projeto
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   cd paginareum
+3. Instale as dependências
+   ```bash
+   npm install
+4. Rode em modo desenvolvimento
+   ```bash
+   npm run dev
