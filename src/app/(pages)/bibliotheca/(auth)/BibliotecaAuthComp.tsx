@@ -123,6 +123,7 @@ export default function BibliotecaAuthComp({ SearchBook = "", SearchType, read_s
                         category={livro.category}
                         showControls={true}
                         refetchBooks={refetchBooks}
+                        read_progress={livro.read_progress}
                     />
                 ))}
             </section>

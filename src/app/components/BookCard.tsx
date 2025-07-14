@@ -2,6 +2,8 @@
 import { BookCardProps } from "../types/types";
 import useBookReadStatus from "../hooks/useBookReadStatus";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 
 // icons
 import { BsThreeDots } from "react-icons/bs";
@@ -9,16 +11,19 @@ import { FaCheck } from "react-icons/fa6";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { GiExpand, GiWhiteBook } from "react-icons/gi";
 import { MdAutoStories } from "react-icons/md";
-import Link from "next/link";
+import { GiFeather } from "react-icons/gi";
+// -----
+
+// modals
 import DeleteBookModal from "./modals/DeleteBookModal";
 import ExpandImgModal from "./modals/ExpandImgModal";
-import Image from "next/image";
+import MarkReadModal from "./modals/MarkReadModal";
 // -----
 
 export default function BookCard({
     book_id, title,
     author, pages,
-    category, urlPath,
+    category, urlPath, read_progress,
     cover_img, refetchBooks, read_status, showControls = false
 }: BookCardProps) {
 
@@ -27,6 +32,7 @@ export default function BookCard({
     const [expandedImg, setExpandedImg] = useState<string | null>(null);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const [showDeleteBook, setShowDeleteBook] = useState<boolean>(false);
+    const [showMarkReadProgress, setShowMarkReadProgress] = useState<boolean>(false);
 
     const toggleDropdown = (id: number) => {
         setOpenDropdownId(prev => (prev === id ? null : id));
@@ -141,6 +147,16 @@ export default function BookCard({
 
                                     <li className="px-4 py-2 flex gap-x-2 items-center  cursor-pointer hover:text-[#b03a2e] duration-150 ease-in-out
                                         "
+                                        onClick={() => setShowMarkReadProgress(true)}
+                                    >
+                                        <span>
+                                            <GiFeather />
+                                        </span>
+                                        <span>Marcar Leitura</span>
+                                    </li>
+
+                                    <li className="px-4 py-2 flex gap-x-2 items-center  cursor-pointer hover:text-[#b03a2e] duration-150 ease-in-out
+                                        "
                                         onClick={() => setShowDeleteBook(true)}
                                     >
                                         <span>
@@ -156,9 +172,18 @@ export default function BookCard({
 
 
                 {pages && (
-                    <span className="absolute opacity-80 group-hover:opacity-100 duration-300 ease-in-out right-2 rounded-full bottom-2 px-2 py-1 text-sm bg-white text-[#797979] outline">
-                        {pages} páginas
-                    </span>
+                    <>
+                        {read_progress == 0 ?
+                            <span className="absolute opacity-80 group-hover:opacity-100 duration-300 ease-in-out right-2 rounded-full bottom-2 px-2 py-1 text-sm bg-white text-[#797979] outline">
+                                {pages} páginas
+                            </span>
+                            :
+                            <span className="absolute duration-300 ease-in-out right-2 rounded-full bottom-2 px-2 py-1 text-sm bg-white text-[#797979] outline">
+                                <span className="text-[#b03a2e]">{read_progress}</span> / {pages} páginas
+                            </span>
+                        }
+                    </>
+
                 )}
             </div>
 
@@ -180,6 +205,16 @@ export default function BookCard({
                 />
             )}
 
+            {/* MODAL marcar leitura*/}
+            {showMarkReadProgress && (
+                <MarkReadModal
+                    setShowMarkReadProgress={setShowMarkReadProgress}
+                    book_id={book_id}
+                    pages={pages!}
+                    refetchBooks={refetchBooks}
+                />
+            )}
+
             <div className="flex flex-col p-3">
                 <h3
                     className="text-lg font-semibold text-[#1a1a1a] mb-1 truncate"
@@ -191,7 +226,7 @@ export default function BookCard({
                 <p className="text-sm text-[#3e3e3e] font-medium mb-0">
                     por {author || "Autor desconhecido"}
                 </p>
-                
+
                 <p className="text-sm text-[#6b705c] mb-0">
                     {category || 'Sem categoria'}
                 </p>

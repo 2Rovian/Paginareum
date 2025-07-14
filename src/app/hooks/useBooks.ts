@@ -61,6 +61,22 @@ export default function useBooks(SearchBook: string = "") {
         setBooks(data || []);
     }
 
+    const handleMarkReadProgress = async (book_id: number, read_progress: number, refetchBooks?: () => void) => {
+        const { error: ReadProgressError } = await supabase
+        .from("books")
+        .update({ read_progress: read_progress })
+        .eq("book_id", book_id)
+
+        if(ReadProgressError){
+            console.error("Erro ao marcar leitura: ", ReadProgressError)
+            toast.error("Erro ao marcar leitura")
+            return
+        }
+
+        refetchBooks?.()
+        toast.success("Progresso salvo com sucesso")
+    }
+
     const handleDeleteBook = async (book_id: number, setShowDeleteBook: setShowDeleteBook, refetchBooks?: () => void) => {
 
         // pega id do usuário e nome do livro
@@ -118,7 +134,7 @@ export default function useBooks(SearchBook: string = "") {
         refetchBooks?.()
     }
 
-    return { fetchAllBooks, fetchByBookName, fetchByReadStatus, handleDeleteBook, debounceBook }
+    return { fetchAllBooks, fetchByBookName, fetchByReadStatus, handleDeleteBook, debounceBook, handleMarkReadProgress }
 }
 
 // funções: fetchAllBooks, handleDeleteBook, handleMarkasRead

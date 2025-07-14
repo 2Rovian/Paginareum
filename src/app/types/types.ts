@@ -18,6 +18,7 @@ export interface Book {
   cover_img: string;
   category?: string;
   profile_id?: string;
+  read_progress?: number;
 }
 
 export interface BookCardProps {
@@ -32,7 +33,8 @@ export interface BookCardProps {
   category?: string;
   profile_id?: string;
   showControls?: boolean; // Mostrar 3-dots e botões (ler agora, marcar lido etc.)
-  refetchBooks?: () => void
+  refetchBooks?: () => void;
+  read_progress?: number;
 
 }
 
