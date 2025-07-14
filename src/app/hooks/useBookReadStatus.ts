@@ -16,6 +16,17 @@ export default function useBookReadStatus( setOpenDropdownId : setOpenDropdownId
             return;
         }
 
+        const { error: ReadProgressError } = await supabase
+        .from("books")
+        .update({ read_progress: 0 })
+        .eq("book_id", id)
+
+        if(ReadProgressError){
+            console.error("Erro ao marcar leitura: ", ReadProgressError)
+            toast.error("Erro ao marcar leitura")
+            return
+        }
+
         toast.success("Livro marcado como lido");
         setOpenDropdownId(null);
         refetchBooks?.();
@@ -47,8 +58,8 @@ export default function useBookReadStatus( setOpenDropdownId : setOpenDropdownId
             .eq("book_id", id)
 
         if (error) {
-            console.error("Erro ao marcar livro como não livro:", error.message);
-            toast.error("Erro ao marcar livro como não livro");
+            console.error("Erro ao marcar livro como não lido:", error.message);
+            toast.error("Erro ao marcar livro como não lido");
             return;
         }
 
