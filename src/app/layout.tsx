@@ -10,7 +10,7 @@ const latoFont = Lato({
 
 export const metadata: Metadata = {
   title: "Paginareum",
-  description: "Paginareum, your place to read only the very best",
+  description: "Monte sua própria biblioteca digital e acompanhe suas leituras.",
 };
 
 export default function RootLayout({
