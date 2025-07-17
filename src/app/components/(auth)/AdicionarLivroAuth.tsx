@@ -13,7 +13,7 @@ export default function AdicionarLivroAuth() {
   // const [filePath, setFilePath] = useState("");
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(false);
-  const [numPag, setNumPag] = useState("");
+  const [numPag, setNumPag] = useState<number | null>(null);
   const [author_name, setAuthor_name] = useState("");
 
   const [pdf_File, setPdfFile] = useState<File | null>(null);
@@ -44,6 +44,13 @@ export default function AdicionarLivroAuth() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (!title.trim() || !category.trim() || numPag === null ||
+      numPag <= 0 || !author_name.trim() || !imgURL) {
+      toast.error("Preencha todos os campos corretamente");
+      return;
+    }
+
     setLoading(true)
 
     // pega dados do user
@@ -131,7 +138,7 @@ export default function AdicionarLivroAuth() {
 
     setTitle("");
     setCategory("");
-    setNumPag("");
+    setNumPag(null);
     setImgURL(null);
     setPdfFile(null);
     setAuthor_name("");
@@ -245,9 +252,10 @@ export default function AdicionarLivroAuth() {
         <input
           type="number"
           placeholder="Número de páginas"
-          value={numPag}
-          onChange={(e) => setNumPag(e.target.value)}
+          value={numPag ?? ""}
+          onChange={(e) => setNumPag(Number(e.target.value))}
           className="bg-white px-3 py-2 max-w-[180px] rounded shadow transition-all duration-150 focus:outline-2 focus:outline-[#b03a2e]"
+          min={0}
         />
       </div>
 
@@ -257,7 +265,7 @@ export default function AdicionarLivroAuth() {
           className="border-2 border-[#6b705c] text-[#6b705c] px-4 py-2 rounded-lg hover:text-[#b03a2e] hover:border-[#b03a2e] cursor-pointer transition duration-200"
           onClick={() => {
             setTitle("");
-            setNumPag("");
+            setNumPag(null);
             setImgURL(null);
             setPdfFile(null);
           }}
