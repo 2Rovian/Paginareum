@@ -1,3 +1,5 @@
+import { FormEvent } from "react";
+
 export interface Livro {
   id: string;
   title: string;
@@ -43,4 +45,28 @@ export interface UserProfile {
   created_at: string,
   username: string,
   avatar_url?: string
+}
+
+export interface handleAddBookProps {
+  title: string;
+  category: string;
+  numPag: number;
+  author_name: string;
+  e?: FormEvent;
+
+  profile_id: string;
+
+  imgURL: File | null;
+  pdf_File: File | null;
+
+  // Callbacks
+  setTitle: (val: string) => void;
+  setCategory: (val: string) => void;
+  setNumPag: (val: number | null) => void;
+  setImgURL: (val: File | null) => void;
+  setPdfFile: (val: File | null) => void;
+  setAuthor_name: (val: string) => void;
+  setLoading: (val: boolean) => void;
+  // ---------
+
 }

@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { useDebounce } from "use-debounce";
 import { Book } from "../types/types";
 import useSlugify from "./useSlugify";
+import { handleAddBookProps } from "../types/types";
 
 type setBooks = (val: Book[]) => void;
 type setIsLoading = (val: boolean) => void;
@@ -63,11 +64,11 @@ export default function useBooks(SearchBook: string = "") {
 
     const handleMarkReadProgress = async (book_id: number, read_progress: number, refetchBooks?: () => void) => {
         const { error: ReadProgressError } = await supabase
-        .from("books")
-        .update({ read_progress: read_progress })
-        .eq("book_id", book_id)
+            .from("books")
+            .update({ read_progress: read_progress })
+            .eq("book_id", book_id)
 
-        if(ReadProgressError){
+        if (ReadProgressError) {
             console.error("Erro ao marcar leitura: ", ReadProgressError)
             toast.error("Erro ao marcar leitura")
             return
@@ -134,7 +135,110 @@ export default function useBooks(SearchBook: string = "") {
         refetchBooks?.()
     }
 
-    return { fetchAllBooks, fetchByBookName, fetchByReadStatus, handleDeleteBook, debounceBook, handleMarkReadProgress }
+    const handleAddBook = async ({
+        title, author_name, category, numPag, imgURL, setLoading, setCategory, setNumPag, setImgURL, setAuthor_name, setTitle, setPdfFile, profile_id, pdf_File
+    }: handleAddBookProps) => {
+
+        setLoading(true)
+
+        let imageURL = "";
+        let pdfURL = "";
+
+        // se houver imagem, faz upload
+        if (imgURL) {
+            const fileExt = imgURL.name.split('.').pop();
+            const slugifiedTitle = slugify(title);
+            const fileName = `${slugifiedTitle}-img.${fileExt}`;
+            const filePathStorage = `${profile_id}/${fileName}`;
+
+            // Caso já exista, sobrescreve
+            const { error: uploadError } = await supabase.storage
+                .from('books-covers')
+                .upload(filePathStorage, imgURL, {
+                    upsert: true, // sobrescreve se já existir
+                });
+
+            if (uploadError) {
+                toast.error("Erro ao enviar imagem");
+                console.error(uploadError);
+                setLoading(false);
+                return;
+            }
+
+            const { data: urlData } = supabase
+                .storage
+                .from('books-covers')
+                .getPublicUrl(filePathStorage);
+
+            imageURL = urlData.publicUrl;
+        }
+
+        if (pdf_File) {
+            const fileBaseName = slugify(title);
+            const fileExt = pdf_File.name.split('.').pop();
+            const fileName = `${fileBaseName}.${fileExt}`;
+            const filePathStorage = `${profile_id}/${fileName}`;
+
+            const { error: uploadPDF_Error } = await supabase.storage
+                .from("books-pdfs")
+                .upload(filePathStorage, pdf_File)
+
+            if (uploadPDF_Error) {
+                toast.error("Erro ao enviar pdf")
+                console.error(uploadPDF_Error)
+                setLoading(false)
+                return
+            }
+
+            const { data: urlData } = supabase.storage
+                .from("books-pdfs")
+                .getPublicUrl(filePathStorage)
+
+            pdfURL = urlData.publicUrl;
+        }
+
+        // joga os dados pra DB
+        const { error } = await supabase
+            .from('books')
+            .insert({
+                title: title,
+                author: author_name,
+                category: category,
+                pages: numPag,
+                urlPath: pdfURL,
+                cover_img: imageURL,
+                profile_id: profile_id
+            })
+
+        if (error) {
+            console.error("Erro ao adicionar livro", error)
+            toast.error("Erro ao adicionar livro")
+            return
+        }
+
+        toast.success("Livro adicionado")
+
+        setTitle("");
+        setCategory("");
+        setNumPag(null);
+        setImgURL(null);
+        setPdfFile(null);
+        setAuthor_name("");
+        // setFilePath("");
+
+        setLoading(false)
+    }
+
+    return {
+        fetchAllBooks,
+        fetchByBookName,
+        fetchByReadStatus,
+        handleDeleteBook,
+        debounceBook,
+        handleMarkReadProgress,
+        handleAddBook
+    }
+
 }
 
 // funções: fetchAllBooks, handleDeleteBook, handleMarkasRead

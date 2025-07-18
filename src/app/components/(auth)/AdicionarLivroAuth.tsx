@@ -6,7 +6,7 @@ import { FiImage, FiFileText } from "react-icons/fi";
 import { supabase } from "@/app/utils/supabase/client";
 import CategoryInput from "./CategoryInput";
 import AuthorInput from "./AuthorInput";
-import useSlugify from "@/app/hooks/useSlugify";
+import useBooks from "@/app/hooks/useBooks";
 
 export default function AdicionarLivroAuth() {
   const [title, setTitle] = useState("");
@@ -20,17 +20,7 @@ export default function AdicionarLivroAuth() {
   const [imgURL, setImgURL] = useState<File | null>(null);
 
   const [profile_id, setprofile_id] = useState<string>('');
-
-  // const slugify = (text: string) =>
-  //   text
-  //     .toLowerCase()
-  //     .normalize("NFD") // remove acentos
-  //     .replace(/[\u0300-\u036f]/g, "")
-  //     .replace(/[^\w\s-]/g, "") // remove pontuação
-  //     .trim()
-  //     .replace(/\s+/g, "-");
-
-  const { slugify } = useSlugify()
+  const { handleAddBook } = useBooks();
 
   useEffect(() => {
     const fetch_profile_id = async () => {
@@ -42,7 +32,7 @@ export default function AdicionarLivroAuth() {
     fetch_profile_id();
   }, []);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     if (!title.trim() || !category.trim() || numPag === null ||
@@ -51,107 +41,23 @@ export default function AdicionarLivroAuth() {
       return;
     }
 
-    setLoading(true)
-
-    // pega dados do user
-    // const { data: { user } } = await supabase.auth.getUser();
-    // if (!user) return toast.error("Usuário não autenticado")
-    // setprofile_id(user.id)
-    //
-
-    let imageURL = "";
-    let pdfURL = "";
-
-    // se houver imagem, faz upload
-    if (imgURL) {
-      const fileExt = imgURL.name.split('.').pop();
-      const slugifiedTitle = slugify(title);
-      const fileName = `${slugifiedTitle}-img.${fileExt}`;
-      const filePathStorage = `${profile_id}/${fileName}`;
-
-      // Caso já exista, sobrescreve
-      const { error: uploadError } = await supabase.storage
-        .from('books-covers')
-        .upload(filePathStorage, imgURL, {
-          upsert: true, // sobrescreve se já existir
-        });
-
-      if (uploadError) {
-        toast.error("Erro ao enviar imagem");
-        console.error(uploadError);
-        setLoading(false);
-        return;
-      }
-
-      const { data: urlData } = supabase
-        .storage
-        .from('books-covers')
-        .getPublicUrl(filePathStorage);
-
-      imageURL = urlData.publicUrl;
-    }
-
-    if (pdf_File) {
-      const fileBaseName = slugify(title);
-      const fileExt = pdf_File.name.split('.').pop();
-      const fileName = `${fileBaseName}.${fileExt}`;
-      const filePathStorage = `${profile_id}/${fileName}`;
-
-      const { error: uploadPDF_Error } = await supabase.storage
-        .from("books-pdfs")
-        .upload(filePathStorage, pdf_File)
-
-      if (uploadPDF_Error) {
-        toast.error("Erro ao enviar pdf")
-        console.error(uploadPDF_Error)
-        setLoading(false)
-        return
-      }
-
-      const { data: urlData } = supabase.storage
-        .from("books-pdfs")
-        .getPublicUrl(filePathStorage)
-
-      pdfURL = urlData.publicUrl;
-    }
-
-    // joga os dados pra DB
-    const { error } = await supabase
-      .from('books')
-      .insert({
-        title: title,
-        author: author_name,
-        category: category,
-        pages: numPag,
-        urlPath: pdfURL,
-        cover_img: imageURL,
-        profile_id: profile_id
-      })
-
-    if (error) {
-      console.error("Erro ao adicionar livro", error)
-      toast.error("Erro ao adicionar livro")
-      return
-    }
-
-    toast.success("Livro adicionado")
-
-    setTitle("");
-    setCategory("");
-    setNumPag(null);
-    setImgURL(null);
-    setPdfFile(null);
-    setAuthor_name("");
-    // setFilePath("");
-
-    setLoading(false)
+    handleAddBook({
+      author_name,
+      pdf_File,
+      title,
+      imgURL,
+      numPag,
+      profile_id,
+      category,
+      setCategory,
+      setTitle,
+      setAuthor_name,
+      setImgURL,
+      setLoading,
+      setNumPag,
+      setPdfFile
+    })
   }
-
-  // const handleFileImgChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   if (e.target.files && e.target.files.length > 0) {
-  //     setImgURL(e.target.files[0]);
-  //   }
-  // }
 
   const handleFileImgChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -184,14 +90,6 @@ export default function AdicionarLivroAuth() {
         onChange={(e) => setTitle(e.target.value)}
         className="bg-white px-3 py-2 rounded shadow transition-all duration-150 focus:outline-2 focus:outline-[#b03a2e]"
       />
-
-      {/* <input
-        type="text"
-        placeholder="Autor"
-        value={author_name}
-        onChange={(e) => setAuthor_name(e.target.value)}
-        className="bg-white px-3 py-2 rounded shadow transition-all duration-150 focus:outline-2 focus:outline-[#b03a2e] "
-      /> */}
 
       <AuthorInput
         profile_id={profile_id}
@@ -236,13 +134,6 @@ export default function AdicionarLivroAuth() {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-x-2 gap-y-2 sm:items-center">
-        {/* <input
-          type="text"
-          placeholder="Categoria"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="bg-white px-3 py-2 rounded shadow transition-all duration-150 focus:outline-2 focus:outline-[#b03a2e] grow"
-        /> */}
         <CategoryInput
           profile_id={profile_id}
           category={category}
